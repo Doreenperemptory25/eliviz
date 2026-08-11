@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/avatar.png" width="128" alt="eliviz logo — a serif e with a gradient comma">
+
 <h1>eliviz</h1>
 
 <h3><i>Your data, made simple.</i></h3>
