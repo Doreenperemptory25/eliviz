@@ -4,7 +4,7 @@
 
 <p>
 <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license">
-<img src="https://img.shields.io/badge/version-0.4.0-blue" alt="Version 0.4.0">
+<img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version 1.0.0">
 <a href="https://code.claude.com/docs/en/plugins"><img src="https://img.shields.io/badge/Claude%20Code-plugin-D97757" alt="Claude Code plugin"></a>
 </p>
 
@@ -74,12 +74,6 @@ Five identities ship in the bank. eliviz picks one based on your data and how yo
       <img src="docs/shots/neon.webp" width="99%" alt="Neon design">
     </td>
   </tr>
-  <tr>
-    <td colspan="2" align="center">
-      <b>aurora</b> — content view: charts and column profile cards<br>
-      <img src="docs/shots/aurora-content.webp" width="99%" alt="Aurora design, content view">
-    </td>
-  </tr>
 </table>
 
 Want something off-menu? The design-adapter agent builds custom packs — your brand colors, a mood, or a blend of bank styles — and screenshot-verifies contrast before handing the page back.
@@ -101,6 +95,10 @@ Want something off-menu? The design-adapter agent builds custom packs — your b
 ## ⚙️ How it works
 
 A bundled Python script (stdlib only) parses your file deterministically and profiles every column. Claude then composes the page — hero, stats, charts, tables — using a design identity from the bank or a custom pack from the design-adapter agent. Everything is inlined into one HTML file that works offline.
+
+<img src="docs/shots/aurora-content.webp" width="100%" alt="Aurora design, content view — charts and column profile cards">
+
+<p align="center"><i>What the page body looks like: every column profiled — types detected, distributions drawn, "a column is like a labeled jar."</i></p>
 
 ## ▶️ Live demos
 
