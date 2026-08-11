@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/avatar.png" width="128" alt="eliviz logo — a serif e with a gradient comma">
+<img src="docs/social-preview.png" width="100%" alt="eliviz — any data file, explained like you're five, one self-contained interactive page">
 
 <h1>eliviz</h1>
 
