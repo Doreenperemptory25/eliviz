@@ -20,8 +20,21 @@
 
 You have a CSV, a log file, a SQLite database, a Markdown report. Someone needs to *see* it — not in a spreadsheet, not in `less`, but as something you'd actually present. eliviz is a [Claude Code](https://code.claude.com/docs/en/plugins) plugin that turns any of those files into one polished, interactive HTML page: animated hero, live stat counters, charts, profiled tables. Parsing is deterministic Python; design is picked from a bank of five distinct identities or custom-built to your brand. The result is one file you can email, drop in Slack, or open from a USB stick.
 
+## 🧒 The ELI5 voice — where the name comes from
+
+**eliviz = ELI5 + viz.** What makes it unique isn't the charts — it's the words around them. Every page speaks in a mandatory plain-English voice (`[MODE: ELI5_FOR_DUMMIES]`, baked verbatim into the skill): a smart 10-year-old could read any label on the page and get it.
+
+So instead of dashboard jargon, generated pages say things like:
+
+> "One row = one record" · "A column is like a labeled jar — click it to peek inside" · "A log is a diary your software writes" · "Errors: things that broke" · "Dig in — like folders inside folders"
+
+The hero opens with *"Your data, made simple"* and defaults to *"A simple tour of X. No jargon."* The voice is enforced end to end: it's a required section in the skill, an item in the output-expectations checklist, a note in the design spec so template edits keep it, and a guardrail in the design-adapter agent — every generated page complies out of the box.
+
+One deliberate boundary: the rule covers the **page's own words only**. Your data — column names, cell values, log lines — is never rewritten.
+
 ## Features
 
+- **ELI5 voice** — all page copy passes the "smart 10-year-old" test; your data itself is never touched
 - **Any input** — CSV, TSV, Excel, SQLite, JSON/JSONL, Markdown, plain text, logs
 - **One file out** — GSAP, three.js, and Tailwind inlined; fully offline-capable (`--cdn` for smaller files)
 - **Animated hero** — three.js particle field with GSAP-driven entrance
