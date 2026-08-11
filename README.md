@@ -4,7 +4,7 @@
 
 <p>
 <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license">
-<img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version 1.0.0">
+<img src="https://img.shields.io/badge/version-1.0.1-blue" alt="Version 1.0.1">
 <a href="https://code.claude.com/docs/en/plugins"><img src="https://img.shields.io/badge/Claude%20Code-plugin-D97757" alt="Claude Code plugin"></a>
 </p>
 
@@ -45,36 +45,36 @@ One deliberate boundary: the rule covers the **page's own words only**. Your dat
 
 ## 🎨 Design bank
 
-Five identities ship in the bank. eliviz picks one based on your data and how you phrase the request, or you choose with `--design <id>`. Same dataset ("Q1–Q3 Sales Pulse"), five looks:
+Five identities ship in the bank. eliviz picks one based on your data and how you phrase the request, or you choose with `--design <id>`. Same dataset ("Q1–Q3 Sales Pulse"), five looks — plus a peek inside the page body:
 
 <table>
   <tr>
-    <td colspan="2" align="center">
-      <b>aurora</b> (default) — dark glass, three.js particle hero<br>
-      <img src="docs/shots/aurora.webp" width="99%" alt="Aurora design, animated hero">
-    </td>
+    <th width="50%" align="center">🌌 aurora — dark glass, particle-wave hero <i>(default)</i></th>
+    <th width="50%" align="center">📰 editorial — warm paper, serif type</th>
   </tr>
   <tr>
-    <td width="50%" align="center">
-      <b>editorial</b> — warm paper, serif type<br>
-      <img src="docs/shots/editorial.webp" width="99%" alt="Editorial design">
-    </td>
-    <td width="50%" align="center">
-      <b>brutalist</b> — hard borders, offset shadows<br>
-      <img src="docs/shots/brutalist.webp" width="99%" alt="Brutalist design">
-    </td>
+    <td align="center"><img src="docs/shots/aurora.webp" width="100%" alt="Aurora design — dark glassmorphism with three.js particle-wave hero"></td>
+    <td align="center"><img src="docs/shots/editorial.webp" width="100%" alt="Editorial design — warm paper ground with serif display type"></td>
   </tr>
   <tr>
-    <td width="50%" align="center">
-      <b>terminal</b> — phosphor CRT<br>
-      <img src="docs/shots/terminal.webp" width="99%" alt="Terminal design">
-    </td>
-    <td width="50%" align="center">
-      <b>neon</b> — cyberpunk glow<br>
-      <img src="docs/shots/neon.webp" width="99%" alt="Neon design">
-    </td>
+    <th align="center">⬛ brutalist — hard borders, offset shadows</th>
+    <th align="center">🖥️ terminal — phosphor CRT, code-rain hero</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/shots/brutalist.webp" width="100%" alt="Brutalist design — stark ground, 2px black borders, hard offset shadows"></td>
+    <td align="center"><img src="docs/shots/terminal.webp" width="100%" alt="Terminal design — phosphor green CRT with falling code-rain hero"></td>
+  </tr>
+  <tr>
+    <th align="center">🌆 neon — cyberpunk glow, synthwave-grid hero</th>
+    <th align="center">🔍 inside every page — columns profiled</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/shots/neon.webp" width="100%" alt="Neon design — violet night with synthwave grid and striped-sun hero"></td>
+    <td align="center"><img src="docs/shots/aurora-content.webp" width="100%" alt="Page body — charts, stat counters, and per-column profile cards"></td>
   </tr>
 </table>
+
+<p align="center"><i>Bottom-right: the page body — every column profiled, types detected, distributions drawn. "A column is like a labeled jar."</i></p>
 
 Want something off-menu? The design-adapter agent builds custom packs — your brand colors, a mood, or a blend of bank styles — and screenshot-verifies contrast before handing the page back.
 
@@ -95,10 +95,6 @@ Want something off-menu? The design-adapter agent builds custom packs — your b
 ## ⚙️ How it works
 
 A bundled Python script (stdlib only) parses your file deterministically and profiles every column. Claude then composes the page — hero, stats, charts, tables — using a design identity from the bank or a custom pack from the design-adapter agent. Everything is inlined into one HTML file that works offline.
-
-<img src="docs/shots/aurora-content.webp" width="100%" alt="Aurora design, content view — charts and column profile cards">
-
-<p align="center"><i>What the page body looks like: every column profiled — types detected, distributions drawn, "a column is like a labeled jar."</i></p>
 
 ## ▶️ Live demos
 
