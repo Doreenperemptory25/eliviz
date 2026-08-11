@@ -12,14 +12,14 @@
 <a href="https://code.claude.com/docs/en/plugins"><img src="https://img.shields.io/badge/Claude%20Code-plugin-D97757" alt="Claude Code plugin"></a>
 </p>
 
-<p>Install in Claude Code — two commands:</p>
+<p><b>Install in Claude Code — two commands:</b></p>
+
+</div>
 
 ```
 /plugin marketplace add costiash/eliviz
 /plugin install eliviz@eliviz
 ```
-
-</div>
 
 ![Aurora design — animated hero over a three.js particle field](docs/shots/aurora.webp)
 
