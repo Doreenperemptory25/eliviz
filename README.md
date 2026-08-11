@@ -98,7 +98,13 @@ A bundled Python script (stdlib only) parses your file deterministically and pro
 
 ## ▶️ Live demos
 
-All five designs rendered on the same demo dataset — `aurora.html`, `editorial.html`, `brutalist.html`, `terminal.html`, `neon.html` — are attached to the [latest release](https://github.com/costiash/eliviz/releases/latest). Download one and open it. No server needed; that's the point.
+**Click, don't clone:** all five designs rendered on the same demo dataset, live on GitHub Pages —
+
+| | | | | |
+|---|---|---|---|---|
+| [🌌 aurora](https://costiash.github.io/eliviz/demos/aurora.html) | [📰 editorial](https://costiash.github.io/eliviz/demos/editorial.html) | [⬛ brutalist](https://costiash.github.io/eliviz/demos/brutalist.html) | [🖥️ terminal](https://costiash.github.io/eliviz/demos/terminal.html) | [🌆 neon](https://costiash.github.io/eliviz/demos/neon.html) |
+
+or browse them from the [demo gallery](https://costiash.github.io/eliviz/). Prefer the fully-offline single-file versions (all libraries inlined, ~1.6 MB each)? They're attached to the [latest release](https://github.com/costiash/eliviz/releases/latest) — download one, open it anywhere, no internet needed.
 
 ## 📄 Requirements & license
 
