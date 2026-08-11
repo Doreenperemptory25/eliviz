@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; display: flex; flex-direction: column; gap: 40px; padding: 40px; }
+
+:root {
+  --ink: #0a0e1c;
+  --cream: #f2ecdd;
+  --dim: #5c6480;
+  --cyan: #4fd8e8;
+  --violet: #8f8ff5;
+  --pink: #f07ac0;
+}
+
+.grad-text {
+  background: linear-gradient(100deg, var(--cyan), var(--violet) 55%, var(--pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------------- social card 1280x640 ---------------- */
+#card {
+  width: 1280px; height: 640px;
+  background:
+    radial-gradient(1000px 500px at 85% 15%, rgba(143,143,245,0.10), transparent 60%),
+    radial-gradient(800px 500px at 10% 90%, rgba(79,216,232,0.07), transparent 55%),
+    var(--ink);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Fraunces', serif;
+}
+
+.cross { position: absolute; width: 17px; height: 17px; opacity: 0.5; }
+.cross::before, .cross::after { content: ''; position: absolute; background: var(--dim); }
+.cross::before { left: 8px; top: 0; width: 1px; height: 17px; }
+.cross::after  { left: 0; top: 8px; width: 17px; height: 1px; }
+
+#card .kicker {
+  position: absolute; left: 72px; top: 118px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px; letter-spacing: 0.32em;
+  color: var(--dim);
+}
+#card .kicker b { color: var(--cream); font-weight: 500; }
+
+#card h1 {
+  position: absolute; left: 68px; top: 168px;
+  font-size: 158px; font-weight: 420; line-height: 1;
+  color: var(--cream); letter-spacing: -0.01em;
+  font-variation-settings: 'opsz' 144;
+}
+#card h1 .eli { font-style: italic; font-weight: 480; }
+#card h1 .dash {
+  display: inline-block; vertical-align: 18px; margin-left: 26px;
+  width: 110px; height: 5px;
+  background: linear-gradient(90deg, var(--violet), var(--pink));
+}
+
+#card .sub {
+  position: absolute; left: 72px; top: 366px; width: 620px;
+  font-size: 28px; font-weight: 340; line-height: 1.45;
+  color: var(--cream); opacity: 0.92;
+}
+#card .sub i { font-style: italic; }
+
+#card .stats {
+  position: absolute; left: 72px; top: 508px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15.5px; letter-spacing: 0.12em; color: var(--dim);
+}
+#card .stats b { color: var(--cream); font-weight: 500; }
+
+#card .install {
+  position: absolute; left: 72px; bottom: 54px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15.5px; letter-spacing: 0.06em; color: var(--dim);
+}
+#card .install .cmd { color: var(--pink); }
+
+/* comma-trail constellation */
+#card svg.trail { position: absolute; right: 0; top: 0; }
+.node-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px; letter-spacing: 0.28em; fill: var(--dim);
+}
+.trail-comma {
+  font-family: 'Fraunces', serif; font-style: italic;
+  fill: rgba(190,185,255,1);
+}
+
+/* ---------------- avatar 512x512 ---------------- */
+#avatar {
+  width: 512px; height: 512px;
+  background:
+    radial-gradient(420px 420px at 72% 22%, rgba(143,143,245,0.12), transparent 62%),
+    radial-gradient(380px 380px at 20% 85%, rgba(79,216,232,0.08), transparent 55%),
+    var(--ink);
+  position: relative; overflow: hidden;
+  font-family: 'Fraunces', serif;
+}
+#avatar .glyph {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-49%, -55%);
+  font-size: 400px; line-height: 1; font-weight: 420;
+  color: var(--cream);
+  font-variation-settings: 'opsz' 144;
+}
+#avatar .glyph .comma {
+  font-style: italic; font-weight: 480;
+  background: linear-gradient(160deg, var(--violet), var(--pink) 75%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  margin-left: -10px;
+}
+#avatar .cross { opacity: 0.55; }
+</style>
+</head>
+<body>
+
+<div id="card">
+  <div class="cross" style="left:36px;  top:36px;"></div>
+  <div class="cross" style="right:36px; top:36px;"></div>
+  <div class="cross" style="left:36px;  bottom:36px;"></div>
+  <div class="cross" style="right:36px; bottom:36px;"></div>
+
+  <div class="kicker">//&nbsp;&nbsp;<b>CLAUDE CODE PLUGIN</b>&nbsp;&nbsp;·&nbsp;&nbsp;YOUR DATA, MADE SIMPLE</div>
+
+  <h1><span class="eli grad-text">eli</span>viz<span class="dash"></span></h1>
+
+  <div class="sub">Any data file, <i>explained like you're five</i> — one self-contained interactive page. No jargon, no servers.</div>
+
+  <div class="stats"><b>8</b> formats&nbsp;&nbsp;/&nbsp;&nbsp;<b>5</b> design identities&nbsp;&nbsp;/&nbsp;&nbsp;<b>1</b> html file&nbsp;&nbsp;/&nbsp;&nbsp;<b>0</b> servers</div>
+
+  <div class="install"><span class="cmd">/plugin</span> install eliviz@eliviz</div>
+
+  <svg class="trail" width="560" height="640" viewBox="0 0 560 640">
+    <!-- comma-trail: CSV -> PAGE, dots are commas -->
+    <g class="trail-comma">
+      <text x="120" y="520" font-size="29" transform="rotate(-12 120 520)">,</text>
+      <text x="168" y="482" font-size="26" transform="rotate(-8 168 482)">,</text>
+      <text x="214" y="440" font-size="30" transform="rotate(-15 214 440)">,</text>
+      <text x="258" y="396" font-size="25" transform="rotate(-5 258 396)">,</text>
+      <text x="300" y="350" font-size="29" transform="rotate(-11 300 350)">,</text>
+      <text x="340" y="302" font-size="26" transform="rotate(-7 340 302)">,</text>
+      <text x="378" y="253" font-size="30" transform="rotate(-14 378 253)">,</text>
+      <text x="414" y="203" font-size="25" transform="rotate(-6 414 203)">,</text>
+      <text x="448" y="152" font-size="28" transform="rotate(-10 448 152)">,</text>
+    </g>
+    <!-- CSV node -->
+    <circle cx="96" cy="552" r="5" fill="none" stroke="#4fd8e8" stroke-width="1.6" opacity="0.9"/>
+    <circle cx="96" cy="552" r="12" fill="none" stroke="#4fd8e8" stroke-width="1" opacity="0.35"/>
+    <text class="node-label" x="63" y="590">CSV</text>
+    <!-- PAGE node -->
+    <circle cx="482" cy="102" r="5" fill="none" stroke="#f07ac0" stroke-width="1.6" opacity="0.95"/>
+    <circle cx="482" cy="102" r="12" fill="none" stroke="#f07ac0" stroke-width="1" opacity="0.4"/>
+    <text class="node-label" x="458" y="76">PAGE</text>
+    <!-- faint scatter -->
+    <g fill="#8f8ff5" opacity="0.3">
+      <circle cx="520" cy="300" r="2"/><circle cx="380" cy="120" r="2"/>
+      <circle cx="200" cy="240" r="2"/><circle cx="480" cy="470" r="2"/>
+      <circle cx="300" cy="560" r="2"/><circle cx="150" cy="360" r="1.6"/>
+    </g>
+  </svg>
+</div>
+
+<div id="avatar">
+  <div class="cross" style="left:28px;  top:28px;"></div>
+  <div class="cross" style="right:28px; top:28px;"></div>
+  <div class="cross" style="left:28px;  bottom:28px;"></div>
+  <div class="cross" style="right:28px; bottom:28px;"></div>
+  <div class="glyph">e<span class="comma">,</span></div>
+</div>
+
+</body>
+</html>
