@@ -2,12 +2,6 @@
 
 <img src="docs/social-preview.png" width="100%" alt="eliviz — any data file, explained like you're five, one self-contained interactive page">
 
-<h1>eliviz</h1>
-
-<h3><i>Your data, made simple.</i></h3>
-
-<p>Any data file in. One stunning, self-contained HTML page out — explained like you're five.</p>
-
 <p>
 <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license">
 <img src="https://img.shields.io/badge/version-0.4.0-blue" alt="Version 0.4.0">
@@ -23,11 +17,7 @@
 /plugin install eliviz@eliviz
 ```
 
-![Aurora design — animated hero over a three.js particle field](docs/shots/aurora.webp)
-
-<p align="center"><i>Every page eliviz produces is a single self-contained HTML file — open it anywhere, share it with anyone, no server, no internet required.</i></p>
-
-You have a CSV, a log file, a SQLite database, a Markdown report. Someone needs to *see* it — not in a spreadsheet, not in `less`, but as something you'd actually present. eliviz turns any of those files into one polished, interactive HTML page: animated hero, live stat counters, charts, profiled tables. One file you can email, drop in Slack, or open from a USB stick.
+You have a CSV, a log file, a SQLite database, a Markdown report. Someone needs to *see* it — not in a spreadsheet, not in `less`, but as something you'd actually present. eliviz turns any of those files into one polished, interactive HTML page: animated hero, live stat counters, charts, profiled tables. One file you can email, drop in Slack, or open from a USB stick — no server, no internet required.
 
 ## 💬 Usage
 
@@ -59,6 +49,12 @@ Five identities ship in the bank. eliviz picks one based on your data and how yo
 
 <table>
   <tr>
+    <td colspan="2" align="center">
+      <b>aurora</b> (default) — dark glass, three.js particle hero<br>
+      <img src="docs/shots/aurora.webp" width="99%" alt="Aurora design, animated hero">
+    </td>
+  </tr>
+  <tr>
     <td width="50%" align="center">
       <b>editorial</b> — warm paper, serif type<br>
       <img src="docs/shots/editorial.webp" width="99%" alt="Editorial design">
@@ -80,7 +76,7 @@ Five identities ship in the bank. eliviz picks one based on your data and how yo
   </tr>
   <tr>
     <td colspan="2" align="center">
-      <b>aurora</b> (default) — content view: charts and column profile cards<br>
+      <b>aurora</b> — content view: charts and column profile cards<br>
       <img src="docs/shots/aurora-content.webp" width="99%" alt="Aurora design, content view">
     </td>
   </tr>
