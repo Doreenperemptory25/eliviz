@@ -1,0 +1,85 @@
+/* ═══ Editorial Light — warm paper, serif display, hairline rules ═══ */
+:root {
+  --tbl-border: rgb(var(--tx) / .18); --tbl-th-bg: #f3efe6; --tbl-stripe: rgb(var(--tx) / .03);
+  --tx: 28 25 23;                    /* ink rgb triplet */
+  --hero-fog: #faf7f2;
+  --hero-static-bg:
+    radial-gradient(ellipse at 50% 28%, rgba(154,52,18,.07), transparent 62%),
+    repeating-linear-gradient(0deg, transparent 0 47px, rgba(28,25,23,.05) 47px 48px),
+    #faf7f2;
+  --ct-number: #b45309; --ct-string: #15803d; --muted: #78716c;
+  --track: rgb(var(--tx) / .09);
+  --donut-text: #1c1917; --donut-text-dim: rgb(var(--tx) / .5);
+  --lvl-error: #dc2626; --lvl-warn: #d97706; --lvl-info: #0369a1; --lvl-debug: #78716c;
+}
+body { background: #faf7f2 !important; color: #1c1917; }
+::selection { background: var(--accent); color: #fff; }
+::-webkit-scrollbar-track { background: #faf7f2; }
+::-webkit-scrollbar-thumb { background: #d6cec2; }
+::-webkit-scrollbar-thumb:hover { background: #bfb5a6; }
+
+/* ink mappings for white-alpha utilities */
+.text-white { color: rgb(var(--tx)) !important; }
+.text-white\/90 { color: rgb(var(--tx) / .92) !important; }
+.text-white\/80 { color: rgb(var(--tx) / .85) !important; }
+.text-white\/75 { color: rgb(var(--tx) / .8) !important; }
+.text-white\/70 { color: rgb(var(--tx) / .76) !important; }
+.text-white\/60 { color: rgb(var(--tx) / .68) !important; }
+.text-white\/55 { color: rgb(var(--tx) / .62) !important; }
+.text-white\/50 { color: rgb(var(--tx) / .58) !important; }
+.text-white\/45 { color: rgb(var(--tx) / .52) !important; }
+.text-white\/40 { color: rgb(var(--tx) / .48) !important; }
+.text-white\/35 { color: rgb(var(--tx) / .44) !important; }
+.text-white\/30 { color: rgb(var(--tx) / .4) !important; }
+.text-white\/25 { color: rgb(var(--tx) / .35) !important; }
+.hover\:text-white:hover { color: rgb(var(--tx)) !important; }
+.placeholder-white\/30::placeholder { color: rgb(var(--tx) / .4) !important; }
+.border-white\/10 { border-color: rgb(var(--tx) / .14) !important; }
+.border-white\/5 { border-color: rgb(var(--tx) / .09) !important; }
+.bg-white\/5 { background-color: rgb(var(--tx) / .06) !important; }
+.bg-white\/15 { background-color: rgb(var(--tx) / .1) !important; }
+.hover\:bg-white\/15:hover { background-color: rgb(var(--tx) / .1) !important; }
+.hover\:bg-white\/5:hover { background-color: rgb(var(--tx) / .06) !important; }
+
+/* surfaces: white cards, hairline borders, soft print shadow */
+.glass { background: #fffdf9 !important; border: 1px solid rgb(var(--tx) / .13) !important;
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+  box-shadow: 0 1px 2px rgb(var(--tx) / .05), 0 10px 28px -20px rgb(var(--tx) / .18); }
+.glass-strong { background: rgba(250,247,242,.94) !important;
+  border: 1px solid rgb(var(--tx) / .14) !important; }
+.chip { background: rgb(var(--tx) / .05); border-color: rgb(var(--tx) / .16); }
+
+/* serif display, italic accent title */
+.font-display { font-family: 'Fraunces', Georgia, 'Times New Roman', serif !important;
+  letter-spacing: 0; }
+.grad-text { background: none !important; -webkit-background-clip: initial !important;
+  background-clip: initial !important; color: var(--accent) !important;
+  -webkit-text-fill-color: var(--accent); font-style: italic; }
+
+/* hero: bare paper, no vignette */
+#hero > div[style*="radial-gradient"] { background: none !important; }
+
+/* tables */
+.dtable th { background: #f3efe6 !important; color: rgb(var(--tx) / .55); }
+.dtable td { border-top: 1px solid rgb(var(--tx) / .1) !important; }
+.dtable tbody tr:hover { background: rgb(var(--tx) / .04) !important; }
+.cell-null { color: rgb(var(--tx) / .3) !important; }
+.cell-num { color: #b45309 !important; }
+.tab-btn.active { color: rgb(var(--tx)) !important; }
+
+/* log viewer */
+.logtext { color: rgb(var(--tx) / .8) !important; }
+.logline:hover { background: rgb(var(--tx) / .05) !important; }
+.lvl-chip.active { background: rgb(var(--tx) / .09) !important; color: rgb(var(--tx)) !important; }
+
+/* prose — dark code blocks stay dark (print-style contrast) */
+.prose-msg h1, .prose-msg h2, .prose-msg h3, .prose-msg h4 { color: rgb(var(--tx)) !important; }
+.prose-msg blockquote { color: #57534e !important; }
+.prose-msg code { background: rgba(154,52,18,.08); border-color: rgba(154,52,18,.22); color: #9a3412; }
+.prose-msg pre code { color: #c8d3f5; background: none; border: none; }
+.prose-doc h1, .prose-doc h2 { border-bottom-color: rgb(var(--tx) / .16) !important; }
+
+/* JSON tree tokens for light ground */
+.jk { color: #1d4ed8; } .js_ { color: #15803d; } .jn { color: #b45309; }
+.jb { color: #be185d; } .jz, .jm { color: #78716c; }
+.jtree summary .tw { color: #a8a29e; }

@@ -1,0 +1,18 @@
+{
+  "id": "editorial",
+  "name": "Editorial Light",
+  "tagline": "Warm paper, serif display, hairline rules — Swiss-magazine restraint",
+  "mood": ["light", "clean", "corporate", "print", "calm", "professional", "minimal", "business"],
+  "best_for": ["reports", "text documents", "business tables", "stakeholder-facing pages", "anything printed or projected"],
+  "hero": "static",
+  "dark": false,
+  "accent": "#9a3412",
+  "accent2": "#0f766e",
+  "accent3": "#9d174d",
+  "fonts": {
+    "display": "Fraunces",
+    "body": "Inter",
+    "mono": "JetBrains Mono",
+    "google": "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&display=swap"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "neon",
+  "name": "Neon Cyberpunk",
+  "tagline": "Deep violet night, hot magenta/cyan glows, chromatic edges",
+  "mood": [
+    "cyberpunk",
+    "night-city",
+    "gaming",
+    "maximal",
+    "electric",
+    "synthwave",
+    "vivid"
+  ],
+  "best_for": [
+    "gaming data",
+    "event/marketing data",
+    "social metrics",
+    "showpieces"
+  ],
+  "hero": "grid",
+  "dark": true,
+  "accent": "#ff2ec4",
+  "accent2": "#00e5ff",
+  "accent3": "#9d4dff",
+  "fonts": {
+    "display": "Orbitron",
+    "body": "Inter",
+    "mono": "JetBrains Mono",
+    "google": "https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&display=swap"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "terminal",
+  "name": "Terminal CRT",
+  "tagline": "Phosphor green on black, scanlines, all-mono, blinking cursor",
+  "mood": [
+    "retro",
+    "hacker",
+    "technical",
+    "dev",
+    "ops",
+    "nostalgic",
+    "matrix"
+  ],
+  "best_for": [
+    "log files",
+    "developer data",
+    "sqlite dumps",
+    "ops dashboards",
+    "anything from a server"
+  ],
+  "hero": "rain",
+  "dark": true,
+  "accent": "#33ff66",
+  "accent2": "#ffbf00",
+  "accent3": "#ff4d4d",
+  "fonts": {
+    "display": "JetBrains Mono",
+    "body": "JetBrains Mono",
+    "mono": "JetBrains Mono",
+    "google": ""
+  }
+}

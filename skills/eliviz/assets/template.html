@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Explorer</title>
+<script src="https://cdn.tailwindcss.com" data-vendor="tailwind.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" data-vendor="gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" data-vendor="ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" data-vendor="three.min.js"></script>
+<script>
+if (window.tailwind) tailwind.config = {
+  theme: { extend: {
+    fontFamily: {
+      sans: ['Inter','ui-sans-serif','system-ui','sans-serif'],
+      display: ['Space Grotesk','Inter','sans-serif'],
+      mono: ['JetBrains Mono','ui-monospace','monospace'],
+    },
+    colors: { ink: '#0b0b14', panel: '#12121f' },
+  }}
+};
+</script>
+<style>
+  :root { --accent:#7c6cff; --accent2:#22d3ee; --accent3:#f472b6; }
+  html { scroll-behavior:smooth; }
+  body { background:#0b0b14; color:#e6e6f0; font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+         -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  ::selection { background:var(--accent); color:#fff; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-track { background:#0b0b14; }
+  ::-webkit-scrollbar-thumb { background:#2a2a3f; border-radius:5px; }
+  ::-webkit-scrollbar-thumb:hover { background:#3d3d5c; }
+
+  .font-display { font-family:'Space Grotesk',Inter,sans-serif; }
+  .glass { background:rgba(255,255,255,.04); backdrop-filter:blur(14px);
+           -webkit-backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.08); }
+  .glass-strong { background:rgba(18,18,31,.82); backdrop-filter:blur(20px);
+           -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.1); }
+  .grad-text { background:linear-gradient(100deg,var(--accent) 0%,var(--accent2) 55%,var(--accent3) 100%);
+           -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .grad-line { background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+  .card-hover { transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s, border-color .35s; }
+  .card-hover:hover { transform:translateY(-5px);
+      box-shadow:0 18px 50px -18px color-mix(in srgb, var(--accent) 45%, transparent);
+      border-color:color-mix(in srgb, var(--accent) 45%, transparent); }
+  .chip { display:inline-flex; align-items:center; gap:.4rem; padding:.28rem .7rem; border-radius:9999px;
+          font-size:.72rem; font-weight:500; background:rgba(255,255,255,.06);
+          border:1px solid rgba(255,255,255,.1); }
+  .reveal { opacity:0; transform:translateY(26px); }
+  .no-js-reveal .reveal { opacity:1; transform:none; }
+
+  .prose-msg { font-size:.9rem; line-height:1.65; overflow-wrap:anywhere; }
+  .prose-msg p { margin:.45em 0; }
+  .prose-msg h1,.prose-msg h2,.prose-msg h3,.prose-msg h4 { font-weight:600; margin:.8em 0 .35em; color:#fff; }
+  .prose-msg h1{font-size:1.2em}.prose-msg h2{font-size:1.1em}.prose-msg h3{font-size:1.02em}
+  .prose-msg ul { list-style:disc; padding-left:1.3em; margin:.4em 0; }
+  .prose-msg ol { list-style:decimal; padding-left:1.3em; margin:.4em 0; }
+  .prose-msg li { margin:.18em 0; }
+  .prose-msg blockquote { border-left:3px solid var(--accent); padding-left:.8em; margin:.5em 0; color:#b6b6cc; }
+  .prose-msg code { font-family:'JetBrains Mono',monospace; font-size:.82em; background:rgba(124,108,255,.14);
+      border:1px solid rgba(124,108,255,.25); border-radius:5px; padding:.08em .35em; }
+  .prose-msg pre { background:#0d0d1a; border:1px solid rgba(255,255,255,.09); border-radius:10px;
+      padding:.85em 1em; overflow-x:auto; margin:.6em 0; }
+  .prose-msg pre code { background:none; border:none; padding:0; font-size:.8rem; line-height:1.55;
+      color:#c8d3f5; display:block; white-space:pre; }
+  .prose-msg a { color:var(--accent2); text-decoration:underline; text-underline-offset:2px; }
+  .prose-msg hr { border-color:rgba(255,255,255,.1); margin:.8em 0; }
+  .prose-msg .tbl-wrap { overflow-x:auto; margin:.8em 0; }
+  .prose-msg table { border-collapse:collapse; font-size:.85em; min-width:60%; }
+  .prose-msg th, .prose-msg td { border:1px solid var(--tbl-border, rgba(255,255,255,.13));
+      padding:.45em .7em; text-align:left; vertical-align:top; }
+  .prose-msg th { background:var(--tbl-th-bg, rgba(255,255,255,.05));
+      color:var(--donut-text,#fff); font-weight:600; white-space:nowrap; }
+  .prose-msg tbody tr:nth-child(even) td { background:var(--tbl-stripe, rgba(255,255,255,.025)); }
+
+  /* larger, article-like variant for the text/markdown reading view */
+  .prose-doc { font-size:1rem; line-height:1.78; }
+  .prose-doc h1 { font-size:1.7em; font-family:'Space Grotesk',Inter,sans-serif; }
+  .prose-doc h2 { font-size:1.35em; font-family:'Space Grotesk',Inter,sans-serif; margin-top:1.4em; }
+  .prose-doc h3 { font-size:1.12em; margin-top:1.2em; }
+  .prose-doc h1,.prose-doc h2 { padding-bottom:.25em; border-bottom:1px solid rgba(255,255,255,.08); }
+  .prose-doc h1,.prose-doc h2,.prose-doc h3,.prose-doc h4 { scroll-margin-top:5rem; }
+
+  details.block-fold > summary { cursor:pointer; list-style:none; user-select:none; }
+  details.block-fold > summary::-webkit-details-marker { display:none; }
+  details.block-fold > summary .fold-arrow { transition:transform .25s; display:inline-block; }
+  details.block-fold[open] > summary .fold-arrow { transform:rotate(90deg); }
+
+  .jtree { font-family:'JetBrains Mono',monospace; font-size:.8rem; line-height:1.7; }
+  .jtree details { padding-left:1.1rem; }
+  .jtree summary { cursor:pointer; list-style:none; margin-left:-1.1rem; }
+  .jtree summary::-webkit-details-marker { display:none; }
+  .jtree summary .tw { display:inline-block; width:1rem; color:#6b6b8a; transition:transform .2s; }
+  .jtree details[open] > summary .tw { transform:rotate(90deg); }
+  .jk { color:#9ecbff; } .js_ { color:#a5e3a1; } .jn { color:#f6c177; }
+  .jb { color:#f472b6; } .jz { color:#6b6b8a; font-style:italic; } .jm { color:#6b6b8a; }
+
+  /* data table */
+  .dtable { border-collapse:separate; border-spacing:0; }
+  .dtable th { position:sticky; top:0; background:#151527; cursor:pointer; user-select:none;
+      white-space:nowrap; transition:color .2s; z-index:1; }
+  .dtable th:hover { color:#fff; }
+  .dtable td { border-top:1px solid rgba(255,255,255,.05); white-space:nowrap;
+      max-width:320px; overflow:hidden; text-overflow:ellipsis; }
+  .dtable tbody tr { transition:background .15s; }
+  .dtable tbody tr:hover { background:rgba(255,255,255,.035); }
+  .cell-null { color:rgba(255,255,255,.22); font-style:italic; }
+  .cell-num { font-family:'JetBrains Mono',monospace; text-align:right; color:#f6c177; }
+  .cell-bool { font-family:'JetBrains Mono',monospace; }
+
+  /* log viewer */
+  .logline { display:flex; gap:.6rem; padding:.14rem .6rem; border-radius:6px;
+      font-family:'JetBrains Mono',monospace; font-size:.74rem; line-height:1.5; }
+  .logline:hover { background:rgba(255,255,255,.04); }
+  .loglvl { flex-shrink:0; width:3.6rem; text-align:center; border-radius:5px; font-size:.62rem;
+      font-weight:600; letter-spacing:.04em; padding:.05rem 0; margin-top:.1rem; }
+  .logtext { white-space:pre-wrap; overflow-wrap:anywhere; color:rgba(230,230,240,.75); }
+  .lvl-chip.active { background:rgba(255,255,255,.16); color:#fff;
+      border-color:color-mix(in srgb, var(--accent) 60%, transparent); }
+
+  #modal-thread { overscroll-behavior:contain; }
+  .bar-anim { transform-origin:bottom; }
+  .hbar-anim { transform-origin:left; }
+  @keyframes pulse-cue { 0%,100%{transform:translateY(0);opacity:.85} 50%{transform:translateY(8px);opacity:.35} }
+  .scroll-cue { animation:pulse-cue 2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue { animation:none; }
+    html { scroll-behavior:auto; }
+  }
+  .tab-btn { position:relative; transition:color .25s; }
+  .tab-btn.active { color:#fff; }
+  .tab-btn.active::after { content:''; position:absolute; left:.4rem; right:.4rem; bottom:-7px; height:2px;
+      border-radius:2px; background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+  .searchbox:focus-within { border-color:color-mix(in srgb, var(--accent) 60%, transparent);
+      box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+  .line-clamp-3 { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+</style>
+<!--__DESIGN_FONTS__-->
+<style id="design-css">/*__DESIGN_CSS__*/</style>
+</head>
+<body>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <canvas id="hero-canvas" class="absolute inset-0 w-full h-full"></canvas>
+  <div class="absolute inset-0 pointer-events-none"
+       style="background:radial-gradient(ellipse at 50% 42%, transparent 0%, rgba(11,11,20,.55) 62%, #0b0b14 100%);"></div>
+  <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+    <div id="hero-eyebrow" class="chip mb-6 opacity-0" style="animation:none;">
+      <span class="w-2 h-2 rounded-full grad-line inline-block"></span>
+      <span id="hero-eyebrow-text" class="tracking-widest uppercase text-[.68rem] text-white/80">Your data, made simple</span>
+    </div>
+    <h1 id="hero-title" class="font-display font-bold leading-[1.04] text-5xl md:text-7xl lg:text-8xl tracking-tight">
+      <span class="grad-text">Data</span> <span class="text-white">Explorer</span>
+    </h1>
+    <p id="hero-subtitle" class="mt-6 text-base md:text-xl text-white/60 max-w-2xl mx-auto font-light"></p>
+    <div id="hero-chips" class="mt-10 flex flex-wrap justify-center gap-3"></div>
+    <a href="#content-start" class="inline-block mt-14 text-white/50 hover:text-white transition-colors">
+      <div class="scroll-cue text-2xl">↓</div>
+      <div class="text-[.7rem] tracking-[.25em] uppercase mt-1">Scroll to explore</div>
+    </a>
+  </div>
+</header>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav id="topnav" class="sticky top-0 z-40 glass-strong border-x-0 border-t-0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-4 h-14">
+    <div class="flex items-center gap-2.5 shrink-0">
+      <div class="w-3 h-3 rounded-full grad-line"></div>
+      <span id="nav-title" class="font-display font-600 font-semibold text-sm text-white/90 hidden sm:block">Data Explorer</span>
+    </div>
+    <div id="tabs" class="flex items-center gap-1 overflow-x-auto flex-1 min-w-0 pb-0.5"></div>
+    <label id="search-wrap" class="searchbox hidden md:flex items-center gap-2 glass rounded-full px-3.5 py-1.5 transition-all shrink-0 w-56">
+      <span class="text-white/40 text-sm">⌕</span>
+      <input id="search" type="text" placeholder="Search…"
+             class="bg-transparent outline-none text-sm w-full placeholder-white/30">
+    </label>
+  </div>
+</nav>
+
+<div id="content-start"></div>
+<main id="content" class="max-w-7xl mx-auto px-4 sm:px-6 pb-24"></main>
+
+<!-- ══════════════ MODAL ══════════════ -->
+<div id="modal" class="fixed inset-0 z-50 hidden">
+  <div id="modal-backdrop" class="absolute inset-0 bg-black/70" style="backdrop-filter:blur(6px)"></div>
+  <div id="modal-panel" class="absolute inset-x-0 bottom-0 top-8 md:inset-x-8 md:top-12 lg:inset-x-24
+       glass-strong rounded-t-3xl md:rounded-3xl flex flex-col overflow-hidden">
+    <div class="flex items-start justify-between gap-4 px-5 md:px-8 pt-5 pb-4 border-b border-white/10 shrink-0">
+      <div class="min-w-0">
+        <h2 id="modal-title" class="font-display font-semibold text-lg md:text-2xl text-white truncate"></h2>
+        <div id="modal-meta" class="flex flex-wrap gap-2 mt-2"></div>
+      </div>
+      <button id="modal-close" class="chip hover:bg-white/15 transition-colors text-sm shrink-0" aria-label="Close">✕ close</button>
+    </div>
+    <div id="modal-thread" class="flex-1 overflow-y-auto px-4 md:px-8 py-6"></div>
+  </div>
+</div>
+
+<footer class="border-t border-white/5 py-10 text-center text-white/35 text-xs">
+  <div id="footer-text">Generated with the eliviz skill</div>
+</footer>
+
+<script type="application/json" id="viz-data">/*__VIZ_DATA__*/</script>
+
+<script>
+/* ════════════════════════════════ BOOT ════════════════════════════════ */
+let DATA = null;
+try { DATA = JSON.parse(document.getElementById('viz-data').textContent); }
+catch (e) { /* placeholder not replaced */ }
+
+const $  = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const hasGsap  = typeof gsap  !== 'undefined';
+const hasThree = typeof THREE !== 'undefined';
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (hasGsap && !reducedMotion) { gsap.registerPlugin(ScrollTrigger); }
+else { document.documentElement.classList.add('no-js-reveal'); }
+
+/* ─────────────────────────────── helpers ─────────────────────────────── */
+const esc = s => String(s ?? '').replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtNum = n => (n ?? 0).toLocaleString('en-US');
+const fmtCompact = n => Intl.NumberFormat('en-US',{notation:'compact',maximumFractionDigits:1}).format(n ?? 0);
+function fmtDate(iso, withTime=false) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const opts = { year:'numeric', month:'short', day:'numeric' };
+  if (withTime) Object.assign(opts, { hour:'2-digit', minute:'2-digit' });
+  return d.toLocaleString('en-US', opts);
+}
+const toNum = v => {
+  if (typeof v === 'number') return v;
+  if (typeof v === 'string') { const n = parseFloat(v.replace(/,/g,'')); return isNaN(n) ? null : n; }
+  return null;
+};
+
+/* Minimal markdown renderer (escape-first, no raw HTML passthrough) */
+function md(src) {
+  if (!src) return '';
+  const fences = [];
+  src = src.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+    fences.push(`<pre><code data-lang="${esc(lang)}">${esc(code.replace(/\n$/,''))}</code></pre>`);
+    return ` F${fences.length-1} `;
+  });
+  let out = esc(src);
+  out = out.replace(/`([^`\n]+)`/g, (_, c) => `<code>${c}</code>`);
+  out = out.replace(/^#{4}\s+(.+)$/gm, '<h4>$1</h4>')
+           .replace(/^###\s+(.+)$/gm, '<h3>$1</h3>')
+           .replace(/^##\s+(.+)$/gm, '<h2>$1</h2>')
+           .replace(/^#\s+(.+)$/gm, '<h1>$1</h1>');
+  out = out.replace(/^\s*(?:---|\*\*\*)\s*$/gm, '<hr>');
+  out = out.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+           .replace(/(^|[\s(])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+  out = out.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  out = out.replace(/^&gt;\s?(.+)$/gm, '<blockquote>$1</blockquote>');
+  // lists
+  out = out.replace(/(^|\n)((?:[ \t]*[-*+][ \t]+.+(?:\n|$))+)/g, (_, pre, blk) => {
+    const items = blk.trim().split('\n').map(l => `<li>${l.replace(/^[ \t]*[-*+][ \t]+/,'')}</li>`).join('');
+    return `${pre}<ul>${items}</ul>\n`;
+  });
+  out = out.replace(/(^|\n)((?:[ \t]*\d+\.[ \t]+.+(?:\n|$))+)/g, (_, pre, blk) => {
+    const items = blk.trim().split('\n').map(l => `<li>${l.replace(/^[ \t]*\d+\.[ \t]+/,'')}</li>`).join('');
+    return `${pre}<ol>${items}</ol>\n`;
+  });
+  // tables (GFM: header row, |---| separator, body rows)
+  out = out.replace(/(^|\n)((?:[ \t]*\|.*\|[ \t]*(?:\n|$)){2,})/g, (m, pre, blk) => {
+    const lines = blk.trim().split('\n').map(l => l.trim());
+    if (lines.length < 2 || !/^\|?[\s:|-]+\|?$/.test(lines[1]) || !lines[1].includes('-')) return m;
+    const cells = l => l.replace(/^\|/,'').replace(/\|$/,'').split('|').map(c => c.trim());
+    const head = cells(lines[0]).map(c => `<th>${c}</th>`).join('');
+    const body = lines.slice(2).map(l =>
+      `<tr>${cells(l).map(c => `<td>${c}</td>`).join('')}</tr>`).join('');
+    return `${pre}<div class="tbl-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>\n`;
+  });
+  // paragraphs
+  out = out.split(/\n{2,}/).map(chunk => {
+    if (/^\s*<(h\d|ul|ol|pre|blockquote|hr|div)/.test(chunk)) return chunk;
+    return `<p>${chunk.replace(/\n/g,'<br>')}</p>`;
+  }).join('\n');
+  out = out.replace(/ F(\d+) /g, (_, i) => fences[+i]);
+  return out;
+}
+
+/* ═══════════════════════════ THREE.JS HERO ═══════════════════════════ */
+const cssVar = name =>
+  getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+/* Three figures, one engine. A design pack picks its figure via design.hero:
+   'wave' (aurora) · 'rain' (terminal) · 'grid' (neon) · 'static' (no WebGL).
+   'particles' is a legacy alias for 'wave'. */
+function initHero() {
+  const canvas = $('#hero-canvas');
+  const design = (DATA && DATA.meta && DATA.meta.design) || {};
+  const style = design.hero === 'particles' ? 'wave' : (design.hero || 'wave');
+  const staticBg = 'var(--hero-static-bg, radial-gradient(ellipse at 30% 20%, rgba(124,108,255,.28), transparent 55%), radial-gradient(ellipse at 75% 70%, rgba(34,211,238,.2), transparent 55%))';
+  if (style === 'static' || !hasThree) { canvas.style.background = staticBg; return; }
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true }); }
+  catch { canvas.style.background = staticBg; return; }
+  const scene = new THREE.Scene();
+  const fogColor = new THREE.Color(cssVar('--hero-fog') || '#0b0b14').getHex();
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 500);
+
+  const accent  = new THREE.Color(cssVar('--accent')  || '#7c6cff');
+  const accent2 = new THREE.Color(cssVar('--accent2') || '#22d3ee');
+  const accent3 = new THREE.Color(cssVar('--accent3') || '#f472b6');
+
+  let mouseX = 0, mouseY = 0;
+  addEventListener('pointermove', e => {
+    mouseX = (e.clientX / innerWidth - .5);
+    mouseY = (e.clientY / innerHeight - .5);
+  }, { passive:true });
+
+  const points = (positions, colors, size, opacity=.85) => {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    g.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    const p = new THREE.Points(g, new THREE.PointsMaterial({ size, vertexColors:true,
+      transparent:true, opacity, blending:THREE.AdditiveBlending, depthWrite:false }));
+    scene.add(p);
+    return { g, p };
+  };
+
+  /* ── figure: WAVE — an ocean of light with drifting motes (aurora) ── */
+  function buildWave() {
+    scene.fog = new THREE.FogExp2(fogColor, 0.016);
+    const COLS = 160, ROWS = 90, SPACING = 0.62;
+    const n = COLS * ROWS;
+    const pos = new Float32Array(n*3), col = new Float32Array(n*3);
+    let i = 0;
+    for (let x = 0; x < COLS; x++) for (let z = 0; z < ROWS; z++) {
+      pos[i*3] = (x - COLS/2) * SPACING; pos[i*3+1] = 0; pos[i*3+2] = (z - ROWS/2) * SPACING;
+      const t = x / COLS;
+      const c = t < .5 ? accent.clone().lerp(accent2, t*2) : accent2.clone().lerp(accent3, (t-.5)*2);
+      col[i*3] = c.r; col[i*3+1] = c.g; col[i*3+2] = c.b;
+      i++;
+    }
+    const wave = points(pos, col, .11);
+    const M = 260;
+    const mpos = new Float32Array(M*3), mcol = new Float32Array(M*3), seeds = new Float32Array(M);
+    for (let j = 0; j < M; j++) {
+      mpos[j*3] = (Math.random()-.5)*90; mpos[j*3+1] = Math.random()*22 - 2;
+      mpos[j*3+2] = (Math.random()-.5)*60;
+      const c = [accent, accent2, accent3][j % 3];
+      mcol[j*3]=c.r; mcol[j*3+1]=c.g; mcol[j*3+2]=c.b;
+      seeds[j] = Math.random()*Math.PI*2;
+    }
+    const motes = points(mpos, mcol, .28, .6);
+    return t => {
+      const p = wave.g.attributes.position.array;
+      let k = 0;
+      for (let x = 0; x < COLS; x++) for (let z = 0; z < ROWS; z++) {
+        const xi = (x - COLS/2) * SPACING, zi = (z - ROWS/2) * SPACING;
+        p[k*3+1] = Math.sin(xi*.32 + t*.9)*1.15 + Math.cos(zi*.38 + t*.62)*1.05
+                 + Math.sin((xi+zi)*.18 + t*.45)*.7;
+        k++;
+      }
+      wave.g.attributes.position.needsUpdate = true;
+      const mp = motes.g.attributes.position.array;
+      for (let j = 0; j < M; j++) {
+        mp[j*3+1] += Math.sin(t*.6 + seeds[j]) * .006 + .004;
+        if (mp[j*3+1] > 24) mp[j*3+1] = -2;
+      }
+      motes.g.attributes.position.needsUpdate = true;
+      wave.p.rotation.y = Math.sin(t*.05)*.14;
+      camera.position.x += (mouseX*4 - camera.position.x) * .04;
+      camera.position.y += (7.5 - mouseY*2.5 - camera.position.y) * .04;
+      camera.lookAt(0, 1.2, 0);
+    };
+  }
+
+  /* ── figure: RAIN — code-rain columns falling down the screen (terminal) ── */
+  function buildRain() {
+    scene.fog = new THREE.FogExp2(fogColor, 0.014);
+    const NCOL = 110, TRAIL = 16, W = 74, H = 44, STEP = .95;
+    const n = NCOL * TRAIL;
+    const pos = new Float32Array(n*3), col = new Float32Array(n*3);
+    const colX = new Float32Array(NCOL), colZ = new Float32Array(NCOL),
+          speed = new Float32Array(NCOL), off = new Float32Array(NCOL);
+    const head = accent.clone().lerp(new THREE.Color('#ffffff'), .6);
+    for (let c = 0; c < NCOL; c++) {
+      colX[c] = (c / NCOL - .5) * W + (Math.random()-.5)*.5;
+      colZ[c] = (Math.random()-.5) * 22;
+      speed[c] = 3.5 + Math.random()*8.5;
+      off[c] = Math.random() * (H + TRAIL*STEP);
+      for (let k = 0; k < TRAIL; k++) {
+        const i = c*TRAIL + k, f = k / TRAIL;
+        const base = k === 0 ? head
+          : accent.clone().lerp(accent2, f*.45).multiplyScalar(Math.pow(1-f, 1.6)*.95 + .05);
+        pos[i*3] = colX[c]; pos[i*3+1] = 0; pos[i*3+2] = colZ[c];
+        col[i*3] = base.r; col[i*3+1] = base.g; col[i*3+2] = base.b;
+      }
+    }
+    const rain = points(pos, col, .42, .9);
+    const span = H + TRAIL*STEP;
+    return t => {
+      const p = rain.g.attributes.position.array;
+      for (let c = 0; c < NCOL; c++) {
+        const headY = H/2 - ((t*speed[c] + off[c]) % span);
+        for (let k = 0; k < TRAIL; k++) {
+          p[(c*TRAIL + k)*3 + 1] = headY + k*STEP;
+        }
+      }
+      rain.g.attributes.position.needsUpdate = true;
+      camera.position.x += (mouseX*3 - camera.position.x) * .04;
+      camera.position.y += (-mouseY*2 - camera.position.y) * .04;
+      camera.lookAt(0, 0, 0);
+    };
+  }
+
+  /* ── figure: GRID — synthwave horizon: scrolling floor + striped sun (neon) ── */
+  function buildGrid() {
+    scene.fog = new THREE.FogExp2(fogColor, 0.0075);
+    const lineMat = cols => new THREE.LineBasicMaterial({ vertexColors:true,
+      transparent:true, opacity:.85, blending:THREE.AdditiveBlending, depthWrite:false });
+    const Z0 = -150, Z1 = 22, XW = 70, LAT = 4;
+    const depthColor = z => {           // near = accent, far = accent2
+      const f = Math.min(Math.max((Z1 - z) / (Z1 - Z0), 0), 1);
+      return accent.clone().lerp(accent2, f);
+    };
+    // longitudinal rails (static)
+    const lonV = [], lonC = [];
+    for (let x = -XW; x <= XW; x += 3.5) {
+      for (const z of [Z1, Z0]) {
+        const c = depthColor(z);
+        lonV.push(x, 0, z); lonC.push(c.r, c.g, c.b);
+      }
+    }
+    const lonG = new THREE.BufferGeometry();
+    lonG.setAttribute('position', new THREE.Float32BufferAttribute(lonV, 3));
+    lonG.setAttribute('color', new THREE.Float32BufferAttribute(lonC, 3));
+    scene.add(new THREE.LineSegments(lonG, lineMat()));
+    // latitude rungs (these scroll toward the camera)
+    const latV = [], latC = [];
+    for (let z = Z0; z <= Z1; z += LAT) {
+      const c = depthColor(z);
+      latV.push(-XW, 0, z, XW, 0, z); latC.push(c.r,c.g,c.b, c.r,c.g,c.b);
+    }
+    const latG = new THREE.BufferGeometry();
+    latG.setAttribute('position', new THREE.Float32BufferAttribute(latV, 3));
+    latG.setAttribute('color', new THREE.Float32BufferAttribute(latC, 3));
+    const rungs = new THREE.LineSegments(latG, lineMat());
+    scene.add(rungs);
+    // striped sun rising off-center, half-sunk into the horizon
+    const SUNR = 24, SUNX = 95, SUNY = 6, SUNZ = -130, BANDS = 24;
+    const sunV = [], sunC = [];
+    for (let b = 0; b < BANDS; b++) {
+      const f = b / (BANDS - 1);                    // 0 top → 1 bottom
+      if (f > .55 && b % 2) continue;               // slitted lower bands, classic style
+      const y = SUNY + SUNR - f * 2 * SUNR;
+      if (y < .6) continue;                         // below the grid = submerged
+      const half = Math.sqrt(Math.max(SUNR*SUNR - (y - SUNY)*(y - SUNY), 0));
+      if (half < .8) continue;
+      const c = accent3.clone().lerp(accent, f*.85);
+      sunV.push(SUNX - half, y, SUNZ, SUNX + half, y, SUNZ);
+      sunC.push(c.r,c.g,c.b, c.r,c.g,c.b);
+    }
+    const sunG = new THREE.BufferGeometry();
+    sunG.setAttribute('position', new THREE.Float32BufferAttribute(sunV, 3));
+    sunG.setAttribute('color', new THREE.Float32BufferAttribute(sunC, 3));
+    scene.add(new THREE.LineSegments(sunG, new THREE.LineBasicMaterial({ vertexColors:true,
+      transparent:true, opacity:.95, blending:THREE.AdditiveBlending, depthWrite:false, fog:false })));
+    // star field above the horizon
+    const S = 220;
+    const spos = new Float32Array(S*3), scol = new Float32Array(S*3);
+    for (let j = 0; j < S; j++) {
+      spos[j*3] = (Math.random()-.5)*220; spos[j*3+1] = 6 + Math.random()*70;
+      spos[j*3+2] = -60 - Math.random()*90;
+      const c = [accent2, accent3, accent][j % 3].clone().multiplyScalar(.55 + Math.random()*.45);
+      scol[j*3]=c.r; scol[j*3+1]=c.g; scol[j*3+2]=c.b;
+    }
+    const stars = points(spos, scol, .5, .8);
+    stars.p.material.fog = false;
+    return t => {
+      rungs.position.z = (t * 9) % LAT;
+      stars.p.rotation.y = Math.sin(t*.02)*.03;
+      camera.position.x += (mouseX*5 - camera.position.x) * .04;
+      camera.position.y += (3.4 - mouseY*2 - camera.position.y) * .04;
+      camera.lookAt(0, 5.5, -60);
+    };
+  }
+
+  const cameraStart = { wave:[0,7.5,26], rain:[0,0,30], grid:[0,3.4,18] }[style] || [0,7.5,26];
+  camera.position.set(...cameraStart);
+  const update = ({ wave:buildWave, rain:buildRain, grid:buildGrid }[style] || buildWave)();
+
+  function resize() {
+    const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
+    renderer.setSize(w, h, false);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  addEventListener('resize', resize); resize();
+
+  const clock = new THREE.Clock();
+  let running = true;
+  // pause rendering when hero is off-screen
+  new IntersectionObserver(([e]) => { running = e.isIntersecting; },
+      { threshold: 0 }).observe($('#hero'));
+
+  function frame() {
+    requestAnimationFrame(frame);
+    if (!running) return;
+    update(clock.getElapsedTime());
+    renderer.render(scene, camera);
+  }
+  if (reducedMotion) { resize(); update(0); renderer.render(scene, camera); }
+  else frame();
+}
+
+/* ═══════════════════════════ SVG CHARTS ═══════════════════════════ */
+function barChart(data, { height=190, color='url(#gradV)' } = {}) {
+  if (!data.length) return '<div class="text-white/30 text-sm py-8 text-center">No data</div>';
+  const max = Math.max(...data.map(d => d.count), 1);
+  const n = data.length, gap = n > 60 ? .5 : 2;
+  const bw = Math.max((720 - gap*n) / n, 1.2);
+  const bars = data.map((d, i) => {
+    const h = Math.max((d.count / max) * (height-24), d.count ? 2 : 0);
+    const x = i * (bw + gap);
+    return `<rect class="bar-anim" x="${x.toFixed(2)}" y="${(height-h).toFixed(2)}" width="${bw.toFixed(2)}" height="${h.toFixed(2)}" rx="${Math.min(bw/2,3)}" fill="${color}" opacity=".92"><title>${esc(d.label ?? d.date)} — ${fmtNum(d.count)}</title></rect>`;
+  }).join('');
+  const first = data[0].label ?? data[0].date, last = data[n-1].label ?? data[n-1].date;
+  return `<svg viewBox="0 0 720 ${height}" class="w-full" preserveAspectRatio="none" style="height:${height}px">
+    <defs><linearGradient id="gradV" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="var(--accent)" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="var(--accent2)"/></linearGradient></defs>${bars}</svg>
+    <div class="flex justify-between text-[.68rem] text-white/40 mt-1.5 font-mono"><span>${esc(String(first))}</span><span>${esc(String(last))}</span></div>`;
+}
+
+function hBars(data, { labelKey='name', valueKey='count' } = {}) {
+  if (!data.length) return '<div class="text-white/30 text-sm py-8 text-center">No data</div>';
+  const max = Math.max(...data.map(d => d[valueKey]), 1);
+  return data.map(d => {
+    const pct = (d[valueKey] / max) * 100;
+    return `<div class="mb-2.5">
+      <div class="flex justify-between text-xs mb-1">
+        <span class="text-white/75 font-mono truncate pr-3">${esc(d[labelKey])}</span>
+        <span class="text-white/45 shrink-0">${fmtNum(d[valueKey])}</span></div>
+      <div class="h-1.5 rounded-full bg-white/5 overflow-hidden">
+        <div class="hbar-anim h-full rounded-full grad-line" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+}
+
+function donut(parts, size=150) {
+  const total = parts.reduce((s,p) => s+p.value, 0) || 1;
+  const R = 56, C = 2*Math.PI*R;
+  let off = 0;
+  const rings = parts.map(p => {
+    const frac = p.value/total, dash = frac*C;
+    const el = `<circle r="${R}" cx="75" cy="75" fill="none" stroke="${p.color}" stroke-width="15"
+      stroke-dasharray="${dash} ${C-dash}" stroke-dashoffset="${-off}" stroke-linecap="round"
+      transform="rotate(-90 75 75)"><title>${esc(p.label)} — ${fmtNum(p.value)}</title></circle>`;
+    off += dash;
+    return el;
+  }).join('');
+  const legend = parts.map(p => `<div class="flex items-center gap-2 text-xs">
+      <span class="w-2.5 h-2.5 rounded-full inline-block" style="background:${p.color}"></span>
+      <span class="text-white/70">${esc(p.label)}</span>
+      <span class="text-white/40 ml-auto">${fmtNum(p.value)}</span></div>`).join('');
+  return `<div class="flex items-center gap-6">
+    <svg viewBox="0 0 150 150" style="width:${size}px;height:${size}px" class="shrink-0">
+      <circle r="${R}" cx="75" cy="75" fill="none" style="stroke:var(--track,rgba(255,255,255,.06))" stroke-width="15"/>${rings}
+      <text x="75" y="71" text-anchor="middle" style="fill:var(--donut-text,#fff)" font-size="20" font-weight="600" font-family="Space Grotesk">${fmtCompact(total)}</text>
+      <text x="75" y="89" text-anchor="middle" style="fill:var(--donut-text-dim,rgba(255,255,255,.45))" font-size="9.5">total</text></svg>
+    <div class="flex-1 space-y-2 min-w-0">${legend}</div></div>`;
+}
+
+/* ═══════════════════════════ SHARED UI BITS ═══════════════════════════ */
+function statCard(icon, value, label, sub='') {
+  return `<div class="glass rounded-2xl p-5 card-hover reveal">
+    <div class="text-xl mb-2 opacity-80">${icon}</div>
+    <div class="font-display font-bold text-2xl md:text-3xl text-white counter" data-target="${value ?? 0}">0</div>
+    <div class="text-xs text-white/50 mt-1 uppercase tracking-wider">${esc(label)}</div>
+    ${sub ? `<div class="text-[.7rem] text-white/35 mt-1">${esc(sub)}</div>` : ''}</div>`;
+}
+function sectionHead(title, sub='') {
+  return `<div class="reveal mb-7 mt-16">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-[3px] rounded grad-line"></div>
+      <h2 class="font-display font-semibold text-xl md:text-2xl text-white">${esc(title)}</h2></div>
+    ${sub ? `<p class="text-white/45 text-sm mt-2 ml-11">${esc(sub)}</p>` : ''}</div>`;
+}
+function panel(inner, cls='') {
+  return `<div class="glass rounded-2xl p-5 md:p-6 reveal ${cls}">${inner}</div>`;
+}
+function noteChip(note) {
+  return note ? `<div class="chip mb-4 !text-amber-200/80 border-amber-300/30">⚠ ${esc(note)}</div>` : '';
+}
+
+const COLTYPE_META = {
+  number:  { color:'var(--ct-number,#f6c177)', icon:'#',  label:'number'  },
+  string:  { color:'var(--ct-string,#a5e3a1)', icon:'𝖠',  label:'text'    },
+  date:    { color:'var(--accent2)',           icon:'📅', label:'date'    },
+  boolean: { color:'var(--accent3)',           icon:'◐',  label:'boolean' },
+};
+
+/* ═══════════════════════════ TABLE DATASET ═══════════════════════════ */
+const tableState = {};   // dsId → { sortCol, sortDir, page }
+const PAGE_SIZE = 100;
+
+function colMiniViz(c) {
+  if (c.type === 'number' && c.histogram)
+    return barChart(c.histogram, { height:76 });
+  if (c.type === 'string' && c.top_values && c.top_values.length)
+    return hBars(c.top_values.slice(0,3), { labelKey:'value' });
+  if (c.type === 'boolean') {
+    const t = c.true_count || 0, f = c.false_count || 0, tot = (t+f) || 1;
+    return `<div class="flex h-2 rounded-full overflow-hidden bg-white/5 mt-3 mb-1.5">
+        <div class="hbar-anim" style="width:${t/tot*100}%;background:var(--accent2)"></div>
+        <div class="hbar-anim" style="width:${f/tot*100}%;background:var(--accent3)"></div></div>
+      <div class="flex justify-between text-[.68rem] text-white/45">
+        <span>true ${fmtNum(t)}</span><span>false ${fmtNum(f)}</span></div>`;
+  }
+  if (c.type === 'date' && c.min)
+    return `<div class="text-[.75rem] text-white/55 font-mono mt-3">${fmtDate(c.min)} <span class="text-white/30">→</span> ${fmtDate(c.max)}</div>`;
+  return '<div class="text-white/25 text-xs mt-3">—</div>';
+}
+
+function colChips(c) {
+  const chips = [`<span class="chip">${fmtNum(c.distinct)} distinct</span>`];
+  if (c.nulls) chips.push(`<span class="chip !text-amber-200/70">∅ ${fmtNum(c.nulls)}</span>`);
+  if (c.type === 'number' && c.mean !== undefined)
+    chips.push(`<span class="chip">μ ${fmtCompact(c.mean)}</span>`);
+  if (c.type === 'string' && c.avg_len)
+    chips.push(`<span class="chip">~${c.avg_len} chars</span>`);
+  return chips.join('');
+}
+
+function renderTable(ds) {
+  const s = ds.stats;
+  const typeParts = [
+    { label:'number',  value:s.numeric_cols, color:COLTYPE_META.number.color },
+    { label:'text',    value:s.text_cols,    color:COLTYPE_META.string.color },
+    { label:'date',    value:s.date_cols,    color:COLTYPE_META.date.color },
+    { label:'boolean', value:s.bool_cols,    color:COLTYPE_META.boolean.color },
+  ].filter(p => p.value);
+
+  const ts = ds.timeseries;
+  return `<section>
+    ${sectionHead('At a glance', `From ${esc(ds.label)}. Think of it as a big grid: rows go across, columns go down.`)}
+    ${noteChip(ds.note)}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      ${statCard('▦', s.row_count, 'Rows', 'one row = one record')}
+      ${statCard('▥', s.col_count, 'Columns', 'one column = one kind of info')}
+      ${statCard('◔', s.filled_pct, '% filled in', `${fmtCompact(s.null_cells)} boxes are empty`)}
+      ${statCard('∑', s.cell_count, 'Little boxes', 'rows × columns')}
+    </div>
+    <div class="grid lg:grid-cols-3 gap-4 mt-4">
+      ${ts ? panel(`<div class="text-sm text-white/60 mb-4 font-medium">When things happened <span class="text-white/35 font-normal">· from the ${esc(ts.column)} column · one bar per ${esc(ts.unit)}</span></div>${barChart(ts.points)}`, 'lg:col-span-2')
+           : panel(`<div class="text-sm text-white/60 mb-4 font-medium">Columns with the most different answers</div>${hBars([...ds.columns].sort((a,b)=>b.distinct-a.distinct).slice(0,7).map(c=>({name:c.name,count:c.distinct})))}`, 'lg:col-span-2')}
+      ${panel(`<div class="text-sm text-white/60 mb-4 font-medium">What the columns hold</div>${donut(typeParts)}`)}
+    </div>
+
+    ${sectionHead('Meet your columns', 'A column is like a labeled jar. One card per jar — click it to peek inside.')}
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      ${ds.columns.map((c, i) => {
+        const m = COLTYPE_META[c.type] || COLTYPE_META.string;
+        return `<article class="glass rounded-2xl p-5 card-hover cursor-pointer reveal" data-open-col="${ds.id}:${i}">
+          <div class="flex items-center gap-2.5 mb-1">
+            <span class="w-7 h-7 rounded-lg flex items-center justify-center text-[.7rem] font-bold shrink-0"
+                  style="background:color-mix(in srgb, ${m.color} 22%, transparent);border:1px solid color-mix(in srgb, ${m.color} 45%, transparent);color:${m.color}">${m.icon}</span>
+            <h3 class="font-mono text-[.85rem] text-white truncate">${esc(c.name)}</h3>
+            <span class="chip ml-auto shrink-0" style="color:${m.color}">${m.label}</span></div>
+          ${colMiniViz(c)}
+          <div class="flex flex-wrap gap-1.5 mt-3">${colChips(c)}</div>
+        </article>`;
+      }).join('')}
+    </div>
+
+    ${sectionHead('The data, row by row', 'Type in the search box up top to filter · click a column name to sort')}
+    <div class="glass rounded-2xl reveal overflow-hidden">
+      <div class="flex items-center gap-3 px-5 pt-4 pb-3 flex-wrap">
+        <div id="tcount-${ds.id}" class="text-xs text-white/45"></div>
+        <div class="ml-auto flex items-center gap-2">
+          <button class="chip hover:bg-white/15 disabled:opacity-30" id="tprev-${ds.id}">← prev</button>
+          <span id="tpage-${ds.id}" class="text-xs text-white/45"></span>
+          <button class="chip hover:bg-white/15 disabled:opacity-30" id="tnext-${ds.id}">next →</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto max-h-[70vh] overflow-y-auto">
+        <table class="dtable w-full text-[.8rem]">
+          <thead id="thead-${ds.id}"></thead>
+          <tbody id="tbody-${ds.id}"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>`;
+}
+
+function cellHtml(v, type) {
+  if (v === null || v === undefined) return '<td class="py-1.5 px-3 cell-null">∅</td>';
+  if (type === 'number') {
+    const n = toNum(v);
+    return `<td class="py-1.5 px-3 cell-num" title="${esc(v)}">${n !== null ? fmtNum(n) : esc(v)}</td>`;
+  }
+  if (type === 'boolean' || typeof v === 'boolean') {
+    const b = v === true || String(v).toLowerCase() === 'true' || String(v).toLowerCase() === 'yes';
+    return `<td class="py-1.5 px-3 cell-bool ${b?'text-emerald-300/80':'text-rose-300/70'}">${b?'✓ true':'✗ false'}</td>`;
+  }
+  return `<td class="py-1.5 px-3 text-white/70" title="${esc(v)}">${esc(v)}</td>`;
+}
+
+function fillTable(ds) {
+  const thead = $(`#thead-${ds.id}`), tbody = $(`#tbody-${ds.id}`);
+  if (!thead || !tbody) return;
+  const st = tableState[ds.id] ??= { sortCol:null, sortDir:1, page:0 };
+  const q = ($('#search')?.value || '').trim().toLowerCase();
+
+  let rows = ds.rows;
+  if (q) rows = rows.filter(r => r.some(c =>
+      c !== null && String(c).toLowerCase().includes(q)));
+
+  if (st.sortCol !== null) {
+    const ci = st.sortCol, type = ds.columns[ci]?.type, dir = st.sortDir;
+    rows = [...rows].sort((a, b) => {
+      const va = a[ci], vb = b[ci];
+      if (va === null && vb === null) return 0;
+      if (va === null) return 1;
+      if (vb === null) return -1;
+      if (type === 'number') return ((toNum(va) ?? 0) - (toNum(vb) ?? 0)) * dir;
+      return String(va).localeCompare(String(vb), undefined, { numeric:true }) * dir;
+    });
+  }
+
+  const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  st.page = Math.min(st.page, pages - 1);
+  const slice = rows.slice(st.page * PAGE_SIZE, (st.page + 1) * PAGE_SIZE);
+
+  thead.innerHTML = `<tr class="text-left text-white/45 text-[.68rem] uppercase tracking-wider">
+    ${ds.columns.map((c, i) => `<th class="py-2.5 px-3" data-sort-col="${i}">
+      ${esc(c.name)} <span class="text-white/60">${st.sortCol===i ? (st.sortDir===1?'▲':'▼') : ''}</span></th>`).join('')}</tr>`;
+  tbody.innerHTML = slice.map(r =>
+    `<tr>${r.map((v, i) => cellHtml(v, ds.columns[i]?.type)).join('')}</tr>`).join('')
+    || `<tr><td class="py-8 text-center text-white/35" colspan="${ds.columns.length}">Nothing matches that search.</td></tr>`;
+
+  const shownFrom = rows.length ? st.page * PAGE_SIZE + 1 : 0;
+  const shownTo = Math.min(rows.length, (st.page + 1) * PAGE_SIZE);
+  $(`#tcount-${ds.id}`).textContent =
+    `${fmtNum(shownFrom)}–${fmtNum(shownTo)} of ${fmtNum(rows.length)} rows` +
+    (q ? ` (filtered from ${fmtNum(ds.rows.length)})` : '') +
+    (ds.capped ? ` · first ${fmtNum(ds.rows.length)} embedded` : '');
+  $(`#tpage-${ds.id}`).textContent = `${st.page + 1} / ${pages}`;
+  $(`#tprev-${ds.id}`).disabled = st.page === 0;
+  $(`#tnext-${ds.id}`).disabled = st.page >= pages - 1;
+}
+
+function wireTable(ds) {
+  const st = tableState[ds.id] ??= { sortCol:null, sortDir:1, page:0 };
+  $(`#thead-${ds.id}`)?.closest('table')?.addEventListener('click', e => {
+    const th = e.target.closest('[data-sort-col]');
+    if (!th) return;
+    const ci = +th.dataset.sortCol;
+    if (st.sortCol === ci) {
+      if (st.sortDir === 1) st.sortDir = -1;
+      else { st.sortCol = null; st.sortDir = 1; }
+    } else { st.sortCol = ci; st.sortDir = 1; }
+    st.page = 0;
+    fillTable(ds);
+  });
+  $(`#tprev-${ds.id}`)?.addEventListener('click', () => { st.page--; fillTable(ds); });
+  $(`#tnext-${ds.id}`)?.addEventListener('click', () => { st.page++; fillTable(ds); });
+  fillTable(ds);
+}
+
+function openColumn(ds, idx) {
+  const c = ds.columns[idx];
+  if (!c) return;
+  const m = COLTYPE_META[c.type] || COLTYPE_META.string;
+  $('#modal-title').textContent = c.name;
+  $('#modal-meta').innerHTML = `
+    <span class="chip" style="color:${m.color}">${m.label}</span>
+    <span class="chip">${fmtNum(c.distinct)} distinct</span>
+    <span class="chip">∅ ${fmtNum(c.nulls)} empty</span>
+    ${c.type==='number' && c.mean!==undefined ? `<span class="chip">min ${fmtCompact(c.min)}</span><span class="chip">median ${fmtCompact(c.median)}</span><span class="chip">mean ${fmtCompact(c.mean)}</span><span class="chip">max ${fmtCompact(c.max)}</span>` : ''}
+    ${c.type==='date' && c.min ? `<span class="chip">${fmtDate(c.min)} → ${fmtDate(c.max)}</span>` : ''}
+    ${c.type==='string' && c.avg_len ? `<span class="chip">avg length ${c.avg_len}</span>` : ''}`;
+  let body = '';
+  if (c.type === 'number' && c.histogram)
+    body = `<div class="glass rounded-2xl p-5"><div class="text-sm text-white/60 mb-4 font-medium">Distribution</div>${barChart(c.histogram, { height:230 })}</div>`;
+  else if (c.type === 'string' && c.top_values && c.top_values.length)
+    body = `<div class="glass rounded-2xl p-5"><div class="text-sm text-white/60 mb-4 font-medium">Most frequent values</div>${hBars(c.top_values, { labelKey:'value' })}</div>`;
+  else if (c.type === 'boolean')
+    body = `<div class="glass rounded-2xl p-5">${donut([
+      { label:'true',  value:c.true_count||0,  color:'var(--accent2)' },
+      { label:'false', value:c.false_count||0, color:'var(--accent3)' }])}</div>`;
+  else
+    body = `<div class="text-white/40 text-sm">No further breakdown for this column type.</div>`;
+  $('#modal-thread').innerHTML = body;
+  showModal();
+  animateBars($('#modal-thread'));
+}
+
+/* ═══════════════════════════ TEXT DATASET ═══════════════════════════ */
+function renderText(ds) {
+  const s = ds.stats;
+  const isMd = ds.format === 'markdown';
+  const hasOutline = isMd && ds.outline.length > 0;
+  return `<section>
+    ${sectionHead('Read it here', hasOutline ? 'Click a title on the left to jump straight to that part' : '')}
+    <div class="flex flex-wrap gap-2 mb-6 reveal">
+      <span class="chip">📝 ${fmtCompact(s.words)} words</span>
+      <span class="chip">⏱ ~${s.reading_minutes} min read</span>
+      ${isMd && s.headings ? `<span class="chip">§ ${fmtNum(s.headings)} sections</span>` : ''}
+      ${s.code_blocks ? `<span class="chip">⌨ ${fmtNum(s.code_blocks)} code blocks</span>` : ''}
+      ${s.links ? `<span class="chip">🔗 ${fmtNum(s.links)} links</span>` : ''}
+    </div>
+    ${noteChip(ds.note)}
+    <div class="grid ${hasOutline ? 'lg:grid-cols-[16rem_1fr]' : ''} gap-4 items-start">
+      ${hasOutline ? `<div class="glass rounded-2xl p-4 reveal lg:sticky lg:top-20 max-h-[75vh] overflow-y-auto">
+        <div class="text-[.68rem] uppercase tracking-widest text-white/40 mb-2.5 px-1.5">Outline</div>
+        ${ds.outline.map((h, i) => `<a href="#hd-${ds.id}-${i}" class="block px-1.5 py-1 rounded-lg text-[.8rem] hover:bg-white/5 transition-colors text-white/${h.level<=2?'80':'50'}" style="padding-left:${(h.level-1)*.7+.4}rem">${esc(h.text)}</a>`).join('')}
+      </div>` : ''}
+      <div class="glass rounded-2xl p-6 md:p-10 reveal min-w-0">
+        ${isMd ? `<div class="prose-msg prose-doc" id="doc-${ds.id}">${md(ds.content)}</div>`
+               : `<pre class="font-mono text-[.82rem] leading-relaxed text-white/70 whitespace-pre-wrap overflow-x-auto">${esc(ds.content)}</pre>`}
+      </div>
+    </div>
+  </section>`;
+}
+
+function wireText(ds) {
+  if (ds.format !== 'markdown' || !ds.outline.length) return;
+  // give rendered headings ids matching the outline order
+  const doc = $(`#doc-${ds.id}`);
+  if (!doc) return;
+  const heads = $$('h1,h2,h3,h4', doc);
+  ds.outline.forEach((h, i) => {
+    // match by text to survive md() quirks; fall back to order
+    const el = heads.find(e => !e.id && e.textContent.trim() === h.text.trim()) || heads[i];
+    if (el && !el.id) el.id = `hd-${ds.id}-${i}`;
+  });
+}
+
+/* ═══════════════════════════ LOG DATASET ═══════════════════════════ */
+const LVL_COLORS = {
+  ERROR:'var(--lvl-error,#fb7185)', WARN:'var(--lvl-warn,#fbbf24)',
+  INFO:'var(--lvl-info,#38bdf8)', DEBUG:'var(--lvl-debug,#94a3b8)',
+};
+const logState = {};   // dsId → { level, shown }
+const LOG_CHUNK = 400;
+
+function renderLog(ds) {
+  const s = ds.stats;
+  const range = s.date_range ? `${fmtDate(s.date_range[0])} → ${fmtDate(s.date_range[1])}` : '';
+  const lvlParts = s.levels.map(l => ({
+    label:l.level, value:l.count, color:LVL_COLORS[l.level] || '#94a3b8' }));
+  const warn = (s.levels.find(l => l.level==='WARN') || {}).count || 0;
+  return `<section>
+    ${sectionHead('At a glance', `A log is a diary your software writes. ${range ? `This one runs ${range}.` : `This one is ${esc(ds.label)}.`}`)}
+    ${noteChip(ds.note)}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      ${statCard('☰', s.total_lines, 'Diary lines', 'one line = one thing that happened')}
+      ${statCard('⛔', s.error_count, 'Errors', s.error_pct ? `things that broke — ${s.error_pct}% of lines` : 'things that broke')}
+      ${statCard('⚠️', warn, 'Warnings', 'close calls, nothing broke yet')}
+      ${statCard('🕐', s.timestamped_lines, 'Have a clock time')}
+    </div>
+    <div class="grid lg:grid-cols-3 gap-4 mt-4">
+      ${s.by_date.length > 1
+        ? panel(`<div class="text-sm text-white/60 mb-4 font-medium">How busy each day was</div>${barChart(s.by_date.map(d=>({label:d.date,count:d.count})))}`, 'lg:col-span-2')
+        : panel(`<div class="text-sm text-white/60 mb-4 font-medium">What time of day things happen</div>${barChart(s.by_hour.map((c,h)=>({label:String(h).padStart(2,'0')+':00',count:c})), { height:150 })}`, 'lg:col-span-2')}
+      ${panel(`<div class="text-sm text-white/60 mb-4 font-medium">How serious the messages are</div>${lvlParts.length ? donut(lvlParts) : '<div class="text-white/30 text-sm py-8 text-center">No message types found</div>'}`)}
+    </div>
+    ${(s.by_date.length > 1 && s.by_hour.some(c=>c)) || s.top_sources.length ? `
+    <div class="grid lg:grid-cols-3 gap-4 mt-4">
+      ${s.by_date.length > 1 ? panel(`<div class="text-sm text-white/60 mb-4 font-medium">What time of day things happen</div>${barChart(s.by_hour.map((c,h)=>({label:String(h).padStart(2,'0')+':00',count:c})), { height:130 })}`, s.top_sources.length ? 'lg:col-span-2' : 'lg:col-span-3') : ''}
+      ${s.top_sources.length ? panel(`<div class="text-sm text-white/60 mb-4 font-medium">Which parts talk the most</div>${hBars(s.top_sources.slice(0,7))}`, s.by_date.length > 1 ? '' : 'lg:col-span-3') : ''}
+    </div>` : ''}
+
+    ${sectionHead('The log, line by line', 'Search up top · click a badge below to see only that kind of message')}
+    <div class="glass rounded-2xl reveal overflow-hidden">
+      <div class="flex items-center gap-2 px-5 pt-4 pb-3 flex-wrap" id="lvlbar-${ds.id}">
+        <button class="chip lvl-chip active" data-lvl="ALL">All</button>
+        ${s.levels.map(l => `<button class="chip lvl-chip" data-lvl="${esc(l.level)}" style="color:${LVL_COLORS[l.level]||'#94a3b8'}">${esc(l.level)} · ${fmtCompact(l.count)}</button>`).join('')}
+        <div id="lcount-${ds.id}" class="text-xs text-white/45 ml-auto"></div>
+      </div>
+      <div class="px-2.5 pb-3 max-h-[70vh] overflow-y-auto" id="lview-${ds.id}"></div>
+      <div class="px-5 pb-4"><button id="lmore-${ds.id}" class="chip hover:bg-white/15 hidden">↓ load more</button></div>
+    </div>
+  </section>`;
+}
+
+function logLineHtml(l) {
+  const color = LVL_COLORS[l.level] || null;
+  return `<div class="logline">
+    ${l.level ? `<span class="loglvl" style="color:${color};background:color-mix(in srgb, ${color} 14%, transparent)">${esc(l.level)}</span>`
+              : '<span class="loglvl" style="color:rgba(255,255,255,.25)">·</span>'}
+    <span class="logtext">${esc(l.raw) || '&nbsp;'}</span></div>`;
+}
+
+function fillLog(ds, { append=false } = {}) {
+  const view = $(`#lview-${ds.id}`);
+  if (!view) return;
+  const st = logState[ds.id] ??= { level:'ALL', shown:LOG_CHUNK };
+  const q = ($('#search')?.value || '').trim().toLowerCase();
+  let lines = ds.lines;
+  if (st.level !== 'ALL') lines = lines.filter(l => l.level === st.level);
+  if (q) lines = lines.filter(l => l.raw.toLowerCase().includes(q));
+
+  const slice = lines.slice(0, st.shown);
+  view.innerHTML = slice.map(logLineHtml).join('') ||
+    '<div class="text-white/35 text-sm py-8 text-center">Nothing matches.</div>';
+  $(`#lcount-${ds.id}`).textContent =
+    `${fmtNum(Math.min(st.shown, lines.length))} of ${fmtNum(lines.length)} shown`;
+  const more = $(`#lmore-${ds.id}`);
+  more.classList.toggle('hidden', lines.length <= st.shown);
+}
+
+function wireLog(ds) {
+  const st = logState[ds.id] ??= { level:'ALL', shown:LOG_CHUNK };
+  $(`#lvlbar-${ds.id}`)?.addEventListener('click', e => {
+    const b = e.target.closest('.lvl-chip');
+    if (!b) return;
+    st.level = b.dataset.lvl; st.shown = LOG_CHUNK;
+    $$('.lvl-chip', $(`#lvlbar-${ds.id}`)).forEach(x =>
+      x.classList.toggle('active', x === b));
+    fillLog(ds);
+  });
+  $(`#lmore-${ds.id}`)?.addEventListener('click', () => {
+    st.shown += LOG_CHUNK; fillLog(ds, { append:true });
+  });
+  fillLog(ds);
+}
+
+/* ═══════════════════════════ GENERIC DATASET ═══════════════════════════ */
+function jtreeNode(key, val, depth) {
+  const keyHtml = key !== null ? `<span class="jk">${esc(key)}</span><span class="jm">: </span>` : '';
+  if (Array.isArray(val)) {
+    if (!val.length) return `<div>${keyHtml}<span class="jm">[]</span></div>`;
+    return `<details ${depth<1?'open':''} data-lazy="1"><summary><span class="tw">▸</span>${keyHtml}<span class="jm">Array(${val.length})</span></summary><div class="jchildren" data-pending="1"></div></details>`;
+  }
+  if (val && typeof val === 'object') {
+    const keys = Object.keys(val);
+    if (!keys.length) return `<div>${keyHtml}<span class="jm">{}</span></div>`;
+    return `<details ${depth<1?'open':''} data-lazy="1"><summary><span class="tw">▸</span>${keyHtml}<span class="jm">{${keys.length} key${keys.length===1?'':'s'}}</span></summary><div class="jchildren" data-pending="1"></div></details>`;
+  }
+  if (typeof val === 'string') {
+    const shown = val.length > 300 ? val.slice(0,300)+'…' : val;
+    return `<div>${keyHtml}<span class="js_">"${esc(shown)}"</span></div>`;
+  }
+  if (typeof val === 'number') return `<div>${keyHtml}<span class="jn">${val}</span></div>`;
+  if (typeof val === 'boolean') return `<div>${keyHtml}<span class="jb">${val}</span></div>`;
+  return `<div>${keyHtml}<span class="jz">null</span></div>`;
+}
+
+const nodeDataMap = new WeakMap();
+function expandLazy(detailsEl) {
+  const holder = detailsEl.querySelector(':scope > .jchildren[data-pending]');
+  if (!holder) return;
+  holder.removeAttribute('data-pending');
+  const val = nodeDataMap.get(detailsEl);
+  if (val === undefined) return;
+  const entries = Array.isArray(val) ? val.map((v,i)=>[String(i),v]) : Object.entries(val);
+  const CAP = 400;
+  holder.innerHTML = entries.slice(0,CAP).map(([k,v]) => jtreeNode(k, v, 99)).join('')
+    + (entries.length > CAP ? `<div class="jz">… ${fmtNum(entries.length-CAP)} more not shown</div>` : '');
+  wireLazyTree(holder, entries.slice(0,CAP));
+}
+function wireLazyTree(container, entries) {
+  const detailNodes = [...container.querySelectorAll(':scope > details')];
+  let di = 0;
+  entries.forEach(([k, v]) => {
+    const isBranch = (Array.isArray(v) && v.length) || (v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length);
+    if (isBranch) {
+      const el = detailNodes[di++];
+      if (el) {
+        nodeDataMap.set(el, v);
+        el.addEventListener('toggle', () => { if (el.open) expandLazy(el); }, { once:false });
+        if (el.open) expandLazy(el);
+      }
+    }
+  });
+}
+
+const TYPE_COLORS = { object:'var(--accent)', array:'var(--accent2)',
+  string:'var(--ct-string,#a5e3a1)', number:'var(--ct-number,#f6c177)',
+  boolean:'var(--accent3)', 'null':'var(--muted,#6b6b8a)' };
+
+function renderGeneric(ds) {
+  const s = ds.stats;
+  const typeParts = Object.entries(s.type_counts).filter(([,v])=>v)
+    .map(([k,v]) => ({ label:k, value:v, color:TYPE_COLORS[k]||'#94a3b8' }));
+  return `<section>
+    ${sectionHead('The shape of your data', `From ${esc(ds.label)}. Picture boxes inside boxes — it starts with ${s.root_type === 'array' ? 'a list' : 'one big box'}.`)}
+    ${noteChip(ds.note)}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      ${statCard('🧩', s.total_nodes, 'Pieces', 'every value counts as one')}
+      ${statCard('🪜', s.max_depth, 'Layers deep', 'boxes inside boxes')}
+      ${statCard('🔑', (s.top_keys[0]||{}).count || 0, 'Most-used label', (s.top_keys[0]||{}).key || '')}
+      ${statCard('🏷', Object.keys(s.type_counts).length, 'Kinds of values')}
+    </div>
+    <div class="grid lg:grid-cols-2 gap-4 mt-4">
+      ${panel(`<div class="text-sm text-white/60 mb-4 font-medium">What it's made of</div>${donut(typeParts)}`)}
+      ${panel(`<div class="text-sm text-white/60 mb-4 font-medium">Labels that repeat the most</div>${hBars(s.top_keys.slice(0,8), { labelKey:'key' })}`)}
+    </div>
+    ${sectionHead('Dig in', 'Click any row with an arrow to open it — like folders inside folders')}
+    ${panel(`<div class="jtree overflow-x-auto" id="jtree-${ds.id}"></div>`)}
+  </section>`;
+}
+
+function mountGenericTree(ds) {
+  const host = $(`#jtree-${ds.id}`);
+  if (!host) return;
+  host.innerHTML = jtreeNode(null, ds.data, 0);
+  const root = host.querySelector(':scope > details');
+  if (root) {
+    nodeDataMap.set(root, ds.data);
+    root.addEventListener('toggle', () => { if (root.open) expandLazy(root); });
+    expandLazy(root);
+  }
+}
+
+/* ═══════════════════════════ MODAL PLUMBING ═══════════════════════════ */
+function showModal() {
+  const m = $('#modal');
+  m.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  $('#modal-thread').scrollTop = 0;
+  if (hasGsap && !reducedMotion) {
+    gsap.fromTo('#modal-backdrop', { opacity:0 }, { opacity:1, duration:.3 });
+    gsap.fromTo('#modal-panel', { y:60, opacity:0, scale:.985 },
+        { y:0, opacity:1, scale:1, duration:.45, ease:'power3.out' });
+  }
+}
+function hideModal() {
+  const m = $('#modal');
+  const done = () => { m.classList.add('hidden'); document.body.style.overflow=''; };
+  if (hasGsap && !reducedMotion) {
+    gsap.to('#modal-panel', { y:50, opacity:0, duration:.28, ease:'power2.in' });
+    gsap.to('#modal-backdrop', { opacity:0, duration:.28, onComplete:done });
+  } else done();
+}
+$('#modal-close').addEventListener('click', hideModal);
+$('#modal-backdrop').addEventListener('click', hideModal);
+addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#modal').classList.contains('hidden')) hideModal(); });
+
+/* ═══════════════════════════ ANIMATION ═══════════════════════════ */
+function animateCounters(scope=document) {
+  $$('.counter', scope).forEach(el => {
+    const target = +el.dataset.target || 0;
+    if (!hasGsap || reducedMotion) { el.textContent = fmtNum(target); return; }
+    const obj = { v: 0 };
+    gsap.to(obj, {
+      v: target, duration: 1.6, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+      onUpdate: () => el.textContent = target > 9999 ? fmtCompact(obj.v) : fmtNum(Math.round(obj.v)),
+      onComplete: () => el.textContent = target > 9999 ? fmtCompact(target) : fmtNum(target),
+    });
+  });
+}
+function animateReveals(scope=document) {
+  const els = $$('.reveal', scope).filter(el => !el.dataset.revealed);
+  els.forEach(el => el.dataset.revealed = '1');
+  if (!hasGsap || reducedMotion) { els.forEach(el => { el.style.opacity=1; el.style.transform='none'; }); return; }
+  ScrollTrigger.batch(els, {
+    start: 'top 94%', once: true,
+    onEnter: batch => gsap.to(batch, { opacity:1, y:0, duration:.7, stagger:.07, ease:'power3.out' }),
+  });
+  // catch anything already above the fold
+  requestAnimationFrame(() => ScrollTrigger.refresh());
+}
+function animateBars(scope=document) {
+  if (!hasGsap || reducedMotion) return;
+  $$('svg .bar-anim', scope).forEach(r => {
+    gsap.fromTo(r, { scaleY:0 }, { scaleY:1, duration:.8, ease:'power2.out',
+      transformOrigin:'50% 100%',
+      scrollTrigger:{ trigger:r.closest('svg'), start:'top 92%', once:true },
+      delay: Math.random()*.4 });
+  });
+  $$('.hbar-anim', scope).forEach(b => {
+    gsap.fromTo(b, { scaleX:0 }, { scaleX:1, duration:.9, ease:'power3.out',
+      transformOrigin:'0 50%',
+      scrollTrigger:{ trigger:b, start:'top 95%', once:true } });
+  });
+}
+
+/* ═══════════════════════════ APP ═══════════════════════════ */
+const SEARCHABLE = new Set(['table', 'log']);
+
+function renderDataset(ds) {
+  const content = $('#content');
+  let html = '';
+  if (ds.type === 'table')     html = renderTable(ds);
+  else if (ds.type === 'text') html = renderText(ds);
+  else if (ds.type === 'log')  html = renderLog(ds);
+  else                         html = renderGeneric(ds);
+  content.innerHTML = html;
+
+  if (ds.type === 'table')   wireTable(ds);
+  if (ds.type === 'text')    wireText(ds);
+  if (ds.type === 'log')     wireLog(ds);
+  if (ds.type === 'generic') mountGenericTree(ds);
+
+  animateReveals(content);
+  animateCounters(content);
+  animateBars(content);
+  if (hasGsap && !reducedMotion) requestAnimationFrame(() => ScrollTrigger.refresh());
+}
+
+let activeDs = null;
+function activate(dsId, { scroll=false } = {}) {
+  const ds = DATA.datasets.find(d => d.id === dsId);
+  if (!ds) return;
+  activeDs = ds;
+  $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.ds === dsId));
+  $('#search-wrap').style.display = SEARCHABLE.has(ds.type) ? '' : 'none';
+  const content = $('#content');
+  const doRender = () => renderDataset(ds);
+  if (hasGsap && !reducedMotion && content.children.length) {
+    gsap.to(content, { opacity:0, y:10, duration:.2, onComplete:() => {
+      doRender(); gsap.fromTo(content, { opacity:0, y:14 }, { opacity:1, y:0, duration:.4 });
+    }});
+  } else doRender();
+  if (scroll) $('#content-start').scrollIntoView({ behavior: reducedMotion?'auto':'smooth' });
+}
+
+function heroChips() {
+  const chips = [];
+  chips.push(`<span class="chip text-white/75">📅 ${esc(DATA.meta.generated_at)}</span>`);
+  for (const ds of DATA.datasets) {
+    if (ds.type === 'table')
+      chips.push(`<span class="chip text-white/75">▦ ${fmtCompact(ds.stats.row_count)} rows × ${fmtNum(ds.stats.col_count)} cols</span>`);
+    else if (ds.type === 'text')
+      chips.push(`<span class="chip text-white/75">📖 ${fmtCompact(ds.stats.words)} words · ~${ds.stats.reading_minutes} min</span>`);
+    else if (ds.type === 'log')
+      chips.push(`<span class="chip text-white/75">☰ ${fmtCompact(ds.stats.total_lines)} lines${ds.stats.error_count ? ` · ⛔ ${fmtCompact(ds.stats.error_count)}` : ''}</span>`);
+    else
+      chips.push(`<span class="chip text-white/75">🧩 ${fmtCompact(ds.stats.total_nodes)} nodes · ${esc(ds.label)}</span>`);
+  }
+  return chips.slice(0, 6).join('');
+}
+
+function boot() {
+  if (!DATA || !DATA.datasets) {
+    $('#hero-subtitle').textContent = 'No data was injected into this template. Run scripts/build_html.py to generate a populated viewer.';
+    return;
+  }
+  const meta = DATA.meta;
+  if (meta.accent) document.documentElement.style.setProperty('--accent', meta.accent);
+  const design = meta.design || {};
+  if (design.accent2) document.documentElement.style.setProperty('--accent2', design.accent2);
+  if (design.accent3) document.documentElement.style.setProperty('--accent3', design.accent3);
+  document.title = meta.title;
+  $('#nav-title').textContent = meta.title;
+
+  // hero text
+  const words = meta.title.split(' ');
+  const mid = Math.ceil(words.length/2);
+  $('#hero-title').innerHTML =
+    `<span class="grad-text">${esc(words.slice(0,mid).join(' '))}</span> <span class="text-white">${esc(words.slice(mid).join(' '))}</span>`;
+  $('#hero-subtitle').textContent = meta.subtitle ||
+    `A simple tour of ${meta.sources.map(s=>s).join(' + ')}. No jargon.`;
+  $('#hero-chips').innerHTML = heroChips();
+  $('#footer-text').textContent =
+    `${meta.title} · generated ${meta.generated_at} from ${meta.sources.join(', ')} · eliviz`;
+
+  // tabs
+  const tabs = $('#tabs');
+  if (DATA.datasets.length > 1) {
+    tabs.innerHTML = DATA.datasets.map(d =>
+      `<button class="tab-btn px-3 py-1.5 text-xs font-medium text-white/50 hover:text-white whitespace-nowrap" data-ds="${d.id}">${esc(d.label)}</button>`).join('');
+    tabs.addEventListener('click', e => {
+      const b = e.target.closest('.tab-btn');
+      if (b) activate(b.dataset.ds, { scroll:true });
+    });
+  }
+
+  // search
+  $('#search').addEventListener('input', () => {
+    if (!activeDs) return;
+    if (activeDs.type === 'table') {
+      (tableState[activeDs.id] ??= { sortCol:null, sortDir:1, page:0 }).page = 0;
+      fillTable(activeDs);
+    }
+    if (activeDs.type === 'log') {
+      (logState[activeDs.id] ??= { level:'ALL', shown:LOG_CHUNK }).shown = LOG_CHUNK;
+      fillLog(activeDs);
+    }
+  });
+
+  // delegated clicks (column profile cards)
+  document.addEventListener('click', e => {
+    const colEl = e.target.closest('[data-open-col]');
+    if (colEl) {
+      const [dsId, idx] = colEl.dataset.openCol.split(':');
+      const ds = DATA.datasets.find(d => d.id === dsId);
+      if (ds) openColumn(ds, +idx);
+    }
+  });
+
+  initHero();
+  activate(DATA.datasets[0].id);
+
+  // hero intro animation
+  if (hasGsap && !reducedMotion) {
+    const tl = gsap.timeline({ defaults:{ ease:'power3.out' } });
+    tl.fromTo('#hero-eyebrow', { opacity:0, y:16 }, { opacity:1, y:0, duration:.7 }, .15)
+      .fromTo('#hero-title', { opacity:0, y:34, scale:.97 }, { opacity:1, y:0, scale:1, duration:1 }, .3)
+      .fromTo('#hero-subtitle', { opacity:0, y:22 }, { opacity:1, y:0, duration:.8 }, .55)
+      .fromTo('#hero-chips .chip', { opacity:0, y:16 }, { opacity:1, y:0, duration:.55, stagger:.07 }, .75);
+    gsap.to('#hero-canvas', {
+      scrollTrigger: { trigger:'#hero', start:'top top', end:'bottom top', scrub:true },
+      opacity:.25, y:120,
+    });
+  } else {
+    $('#hero-eyebrow').style.opacity = 1;
+  }
+}
+boot();
+</script>
+</body>
+</html>

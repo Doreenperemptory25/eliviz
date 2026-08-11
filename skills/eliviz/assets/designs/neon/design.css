@@ -1,0 +1,66 @@
+/* ═══ Neon Cyberpunk — violet night, magenta/cyan glow ═══ */
+:root {
+  --tbl-border: rgba(0,229,255,.16); --tbl-th-bg: #150826; --tbl-stripe: rgba(157,77,255,.06);
+  --hero-fog: #0a0118;
+  --hero-static-bg:
+    radial-gradient(ellipse at 25% 15%, rgba(255,46,196,.2), transparent 55%),
+    radial-gradient(ellipse at 80% 75%, rgba(0,229,255,.16), transparent 55%), #0a0118;
+  --ct-number: #ffb84d; --ct-string: #7dffb3; --muted: #6b5a8a;
+  --track: rgba(0,229,255,.1);
+  --lvl-error: #ff5470; --lvl-warn: #ffb84d; --lvl-info: #00e5ff; --lvl-debug: #8a7aa8;
+}
+body { background:
+  radial-gradient(ellipse at 18% 0%, rgba(157,77,255,.14), transparent 52%),
+  radial-gradient(ellipse at 100% 100%, rgba(0,229,255,.07), transparent 50%),
+  #0a0118 !important; }
+::selection { background: #ff2ec4; color: #0a0118; }
+::-webkit-scrollbar-track { background: #0a0118; }
+::-webkit-scrollbar-thumb { background: #3b2a5e; }
+::-webkit-scrollbar-thumb:hover { background: #55407f; }
+
+/* surfaces: violet glass with cyan edge-light */
+.glass { background: rgba(157,77,255,.06) !important;
+  border: 1px solid rgba(0,229,255,.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05); }
+.glass-strong { background: rgba(16,4,38,.85) !important;
+  border: 1px solid rgba(0,229,255,.2) !important; }
+.chip { border-color: rgba(0,229,255,.22); background: rgba(157,77,255,.1); }
+.card-hover:hover {
+  box-shadow: 0 0 34px -8px rgba(255,46,196,.5), 0 0 20px -10px rgba(0,229,255,.45) !important;
+  border-color: rgba(255,46,196,.5) !important; }
+
+/* type: techno display with glow */
+.font-display { font-family: 'Orbitron', 'Space Grotesk', sans-serif !important;
+  letter-spacing: .01em; }
+.grad-text { filter: drop-shadow(0 0 14px rgba(255,46,196,.55)) drop-shadow(0 0 30px rgba(0,229,255,.3)); }
+h1#hero-title .text-white { text-shadow: 0 0 20px rgba(0,229,255,.4); }
+.grad-line { box-shadow: 0 0 12px rgba(255,46,196,.6); }
+
+/* hero vignette re-tinted */
+#hero > div[style*="radial-gradient"] {
+  background: radial-gradient(ellipse at 50% 42%, transparent 0%, rgba(10,1,24,.55) 62%, #0a0118 100%) !important; }
+
+/* section markers glow */
+.tab-btn.active::after { box-shadow: 0 0 10px rgba(255,46,196,.7); }
+.searchbox:focus-within { box-shadow: 0 0 0 3px rgba(0,229,255,.18), 0 0 18px rgba(0,229,255,.25) !important;
+  border-color: rgba(0,229,255,.6) !important; }
+
+/* tables */
+.dtable th { background: #150826 !important; }
+.dtable td { border-top: 1px solid rgba(0,229,255,.07) !important; }
+.dtable tbody tr:hover { background: rgba(157,77,255,.09) !important; }
+.cell-num { color: #00e5ff !important; }
+
+/* log viewer */
+.lvl-chip.active { border-color: rgba(255,46,196,.6) !important;
+  box-shadow: 0 0 12px rgba(255,46,196,.35); }
+
+/* prose + code */
+.prose-msg code { background: rgba(0,229,255,.1); border-color: rgba(0,229,255,.25); color: #7de8ff; }
+.prose-msg pre { background: #0d0225; border-color: rgba(157,77,255,.25); }
+.prose-msg a { color: #00e5ff; text-shadow: 0 0 8px rgba(0,229,255,.4); }
+.prose-msg blockquote { border-left-color: #ff2ec4 !important; }
+
+/* JSON tree tokens */
+.jk { color: #7de8ff; } .js_ { color: #7dffb3; } .jn { color: #ffb84d; }
+.jb { color: #ff2ec4; } .jz, .jm { color: #6b5a8a; }

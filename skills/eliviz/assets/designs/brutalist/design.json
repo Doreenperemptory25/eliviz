@@ -1,0 +1,18 @@
+{
+  "id": "brutalist",
+  "name": "Brutalist",
+  "tagline": "Stark ground, 2px black borders, hard offset shadows, zero blur",
+  "mood": ["raw", "loud", "bold", "playful", "punk", "startup", "poster", "high-contrast"],
+  "best_for": ["portfolios", "creative data", "launch pages", "anything that should shout"],
+  "hero": "static",
+  "dark": false,
+  "accent": "#2050ff",
+  "accent2": "#ff6b2b",
+  "accent3": "#d6006e",
+  "fonts": {
+    "display": "Archivo Black",
+    "body": "Inter",
+    "mono": "Space Mono",
+    "google": "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap"
+  }
+}

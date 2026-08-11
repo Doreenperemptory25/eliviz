@@ -1,0 +1,31 @@
+{
+  "id": "aurora",
+  "name": "Aurora Glass",
+  "tagline": "Dark, luminous, editorial — glassmorphism over a particle wave",
+  "mood": [
+    "dark",
+    "luminous",
+    "futuristic",
+    "elegant",
+    "premium",
+    "night"
+  ],
+  "best_for": [
+    "mixed datasets",
+    "dashboards",
+    "portfolio pieces",
+    "exports",
+    "anything — the default"
+  ],
+  "hero": "wave",
+  "dark": true,
+  "accent": "#7c6cff",
+  "accent2": "#22d3ee",
+  "accent3": "#f472b6",
+  "fonts": {
+    "display": "Space Grotesk",
+    "body": "Inter",
+    "mono": "JetBrains Mono",
+    "google": ""
+  }
+}
