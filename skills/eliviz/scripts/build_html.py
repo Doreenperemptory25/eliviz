@@ -11,6 +11,7 @@ Usage:
 """
 
 import argparse
+import html as html_mod
 import json
 import os
 import sys
@@ -146,6 +147,11 @@ def main(argv=None):
 
     with open(args.template, encoding="utf-8") as fh:
         template_html = fh.read()
+
+    # Static <title> so link previews / crawlers see the real name pre-JS.
+    template_html = template_html.replace(
+        "<title>Data Explorer</title>",
+        f"<title>{html_mod.escape(title)}</title>", 1)
 
     if not args.cdn:
         template_html = inline_vendor_libs(template_html)
